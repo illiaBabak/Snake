@@ -12,7 +12,8 @@
       "isolatedModules": true,
       "baseUrl": "./",
       "module": "ES6",
-      "jsx": "react-jsx"
+      "jsx": "react-jsx",
+      "allowSyntheticDefaultImports": true
     },
     "include": ["./"]
 }

@@ -1,6 +1,6 @@
-import { getTargetElement } from './GetTargetElement';
+import { getTargetElement } from './utils/getTargetElement';
 
-export function showOrHideSettings(isClose: boolean) {
+export function showOrHideSettings(isClose: boolean): void {
   const showTutorial = getTargetElement('show-tutorial', document.getElementsByTagName('div'));
   const settingsDiv = getTargetElement('settings', document.getElementsByTagName('div'));
 
