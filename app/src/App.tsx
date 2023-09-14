@@ -2,20 +2,22 @@ import './App.scss';
 import { useEffect } from 'react';
 import { showTutorial } from './core/showTutorial';
 import { getTargetElement } from './utils/getTargetElement';
-import { showOrHideSettings } from './showOrHideSettings';
 import { getTargetElements } from './utils/getTargetElements';
-import { getRandomInteger } from './utils/getRandomInteger';
+import { changeDirection } from './core/changeDirection';
+import { makeRandomApple } from './core/makeRandomApple';
+import { isGameOver } from './core/isGameOver';
 
 const ROW_LENGTH = 40;
 const ACCELERATION_FACTOR = 0.95;
 
 function App(): JSX.Element {
   const currentSnake = [3, 2, 1];
+  const appleIndex = 0;
   let direction = 1;
   let score = 0;
-  let appleIndex = 0;
   let intervalTime = 300;
   let interval: NodeJS.Timeout | null = null;
+  let lastKey = 'KeyD';
 
   useEffect(() => {
     const overlayStart = getTargetElement('overlay-start', document.getElementsByTagName('div'));
@@ -23,26 +25,11 @@ function App(): JSX.Element {
     const main = getTargetElement('main', document.getElementsByTagName('div'));
 
     const showTutorialButton = document.getElementsByClassName('show-tutorial-button')[0];
-    const settingsButton = document.getElementsByClassName('settings-button')[0];
-    const closeSettings = document.getElementsByClassName('close-settings')[0];
     const startButton = document.getElementsByClassName('start-button')[0];
 
-    if (
-      !showTutorialButton ||
-      !overlayStart ||
-      !tutorialOverlay ||
-      !main ||
-      !settingsButton ||
-      !closeSettings ||
-      !startButton
-    )
-      return;
+    if (!showTutorialButton || !overlayStart || !tutorialOverlay || !main || !startButton) return;
 
     showTutorialButton.addEventListener('click', () => showTutorial(overlayStart, tutorialOverlay, main));
-
-    settingsButton.addEventListener('click', () => showOrHideSettings(false));
-
-    closeSettings.addEventListener('click', () => showOrHideSettings(true));
 
     startButton.addEventListener('click', startGame);
 
@@ -53,18 +40,21 @@ function App(): JSX.Element {
     }
   }, []);
 
-  function changeDirection(e: KeyboardEvent) {
-    if (e.code === 'KeyW') direction = -ROW_LENGTH;
-    else if (e.code === 'KeyS') direction = +ROW_LENGTH;
-    else if (e.code === 'KeyA') direction = -1;
-    else if (e.code === 'KeyD') direction = 1;
-  }
-
   function startGame() {
     const squares = getTargetElements('grid-div', document.getElementsByTagName('div'));
+
     if (!squares) return;
 
-    makeRandomApple(squares);
+    const scoreDiv = getTargetElement('score-div', document.getElementsByTagName('div'));
+    scoreDiv?.classList.remove('hidden');
+
+    const settings = getTargetElement('settings', document.getElementsByTagName('div'));
+    settings?.classList.remove('hidden');
+
+    const container = getTargetElement('container', document.getElementsByTagName('div'));
+    container?.classList.add('row');
+
+    makeRandomApple(squares, appleIndex);
     currentSnake.forEach((index) => {
       if (index >= 0 && index < squares.length) {
         squares[index].classList.add('snake');
@@ -75,13 +65,17 @@ function App(): JSX.Element {
     const tutorialOverlay = document.getElementsByClassName('tutorial-overlay')[0];
     tutorialOverlay.classList.add('hidden');
 
-    document.addEventListener('keydown', changeDirection);
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'KeyW' || e.code === 'KeyS' || e.code === 'KeyA' || e.code === 'KeyD') {
+        direction = changeDirection(e.code, ROW_LENGTH, direction);
+        lastKey = e.code;
+      }
+    });
   }
 
   function moveOutcome() {
     const squares = getTargetElements('grid-div', document.getElementsByTagName('div'));
-    if (isGameOver(squares) && interval) {
-      gameOver();
+    if (isGameOver(squares, direction, ROW_LENGTH, currentSnake, lastKey) && interval) {
       clearInterval(interval);
     } else moveSnake(squares);
   }
@@ -98,56 +92,38 @@ function App(): JSX.Element {
     eatApple(squares, tail);
   }
 
-  function isGameOver(squares: HTMLDivElement[]) {
-    if (
-      (currentSnake[0] + ROW_LENGTH >= ROW_LENGTH * ROW_LENGTH && direction === ROW_LENGTH) ||
-      (currentSnake[0] % ROW_LENGTH === ROW_LENGTH - 1 && direction === 1) ||
-      (currentSnake[0] % ROW_LENGTH === 0 && direction === -1) ||
-      (currentSnake[0] - ROW_LENGTH <= 0 && direction === -ROW_LENGTH) ||
-      squares[currentSnake[0] + direction].classList.contains('snake')
-    ) {
-      return true;
-    }
-    return false;
-  }
-
   function eatApple(squares: HTMLDivElement[], tail: number) {
-    if (squares[currentSnake[0]].classList.contains('apple') && interval) {
-      squares[currentSnake[0]].classList.remove('apple');
-      squares[tail].classList.add('snake');
+    if (interval) {
+      if (
+        squares[currentSnake[0]].classList.contains('super-apple') ||
+        squares[currentSnake[0]].classList.contains('apple')
+      ) {
+        let loopN = 1;
+        if (squares[currentSnake[0]].classList.contains('apple')) {
+          squares[currentSnake[0]].classList.remove('apple');
+          makeRandomApple(squares, appleIndex);
+        } else {
+          squares[currentSnake[0]].classList.remove('super-apple');
+          loopN = 5;
+        }
 
-      score++;
-      currentSnake.push(tail);
-      makeRandomApple(squares);
+        squares[currentSnake[0]].classList.remove('super-apple');
+        squares[tail].classList.add('snake');
 
-      clearInterval(interval);
-      intervalTime = intervalTime * ACCELERATION_FACTOR;
-      interval = setInterval(moveOutcome, intervalTime);
+        clearInterval(interval);
+
+        for (let i = 0; i < loopN; i++) {
+          currentSnake.push(tail);
+          intervalTime = intervalTime * ACCELERATION_FACTOR;
+        }
+
+        interval = setInterval(moveOutcome, intervalTime);
+
+        score += loopN;
+        const scoreP = getTargetElement('score', document.getElementsByTagName('p'));
+        if (scoreP) scoreP.innerText = score.toString();
+      }
     }
-  }
-
-  function makeRandomApple(squares: HTMLDivElement[]) {
-    appleIndex = getRandomInteger(0, squares.length - 1);
-
-    squares[appleIndex].classList.add('apple');
-  }
-
-  function gameOver() {
-    document.removeEventListener('keydown', changeDirection);
-
-    const scoreText = getTargetElement('score-p', document.getElementsByTagName('p'));
-    const tryAgainButton = getTargetElement('try-again', document.getElementsByTagName('div'));
-    const gameOverDiv = getTargetElement('game-over', document.getElementsByTagName('div'));
-    if (!scoreText || !tryAgainButton || !gameOverDiv) return;
-
-    scoreText.innerText = score.toString();
-
-    gameOverDiv.classList.remove('hidden');
-
-    tryAgainButton.addEventListener('click', () => {
-      sessionStorage.setItem('game-over', JSON.stringify('true'));
-      location.reload();
-    });
   }
 
   return (
@@ -189,28 +165,28 @@ function App(): JSX.Element {
             </div>
           </div>
           <div className="start-button">Ok</div>
-          <div className="settings-button">Settings</div>
         </div>
-        <div className="settings hidden">
-          <p>Settings:</p>
-          <div className="settings-options">
-            <div className="change-velocity">
-              <p>Velocity</p>
-              <input type="number" defaultValue={2}></input>
-            </div>
-          </div>
-          <div className="close-settings">Close</div>
+      </div>
+
+      <div className="settings hidden">
+        <h2>Settings</h2>
+        <div className="speed"></div>
+        <div className="color-snake"></div>
+        <div className="color-main"></div>
+        <div className="size-main">
+          <select>
+            <option value={'20'}>20x20</option>
+            <option value={'30'}>30x30</option>
+            <option value={'40'}>40x40</option>
+            <option value={'50'}>50x50</option>
+          </select>
         </div>
       </div>
 
       <div className="main hidden"></div>
 
-      <div className="game-over hidden">
-        <p>Game over!!!</p>
-        <div className="score">
-          Score:<p className="score-p"></p>
-        </div>
-        <div className="try-again">Try again</div>
+      <div className="score-div hidden">
+        Score: <p className="score">0</p>
       </div>
     </div>
   );

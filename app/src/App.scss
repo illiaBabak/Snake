@@ -1,7 +1,7 @@
 $container: #28b148;
-$border: #21904f;
-$main: #ffcb75;
-$overlay: rgba(69, 76, 99, 0.852);
+$border: #1b7942;
+$main: #ffc66a;
+$overlay: rgba(35, 38, 47, 0.5);
 
 .container,
 #root,
@@ -15,22 +15,18 @@ $overlay: rgba(69, 76, 99, 0.852);
   background-color: $container;
 }
 
-.overlay-start,
-.main {
-  display: flex;
-  border: 4px solid $border;
-  border-radius: 16px;
-}
-
 .overlay-start {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 1850px;
   height: 900px;
+  border: 4px solid $border;
+  border-radius: 16px;
 
   div {
-    margin: 28px;
+    margin: 24px;
     font-size: 28px;
     color: white;
   }
@@ -43,7 +39,8 @@ $overlay: rgba(69, 76, 99, 0.852);
   }
 
   .header p {
-    font-size: 32px;
+    font-size: 40px;
+    font-weight: bold;
   }
 
   .show-tutorial-button {
@@ -71,6 +68,7 @@ $overlay: rgba(69, 76, 99, 0.852);
   top: 50%;
   transform: translate(-50%, -50%);
   background-color: $overlay;
+  font-size: 20px;
 
   .show-tutorial {
     display: flex;
@@ -83,7 +81,7 @@ $overlay: rgba(69, 76, 99, 0.852);
     color: white;
 
     .tutorial-header {
-      font-size: 24px;
+      font-size: 36px;
     }
 
     .tutorial-body {
@@ -111,9 +109,9 @@ $overlay: rgba(69, 76, 99, 0.852);
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 150px;
-      height: 70px;
-      padding: 4px;
+      width: 140px;
+      height: 60px;
+      padding: 2px;
       border: 6px solid gray;
       border-radius: 16px;
       background-color: white;
@@ -130,11 +128,12 @@ $overlay: rgba(69, 76, 99, 0.852);
 }
 
 .main {
-  background-color: $main;
+  display: flex;
   flex-wrap: wrap;
+  background-color: $main;
   width: 800px;
   height: 800px;
-  border: 1px solid red;
+  border: 2px solid $border;
   border-radius: 0;
 
   div {
@@ -147,137 +146,9 @@ $overlay: rgba(69, 76, 99, 0.852);
   background-color: blue;
 }
 
-.game-over {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: $container;
-  border: 4px solid $border;
-  border-radius: 16px;
-  z-index: 3;
-  color: white;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 450px;
-  height: 300px;
-  padding: 2px;
-  font-size: 24px;
-
-  div,
-  p {
-    margin: 24px;
-  }
-
-  .try-again {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 140px;
-    height: 55px;
-    padding: 8px;
-    border: 4px solid $border;
-    border-radius: 12px;
-
-    &:hover {
-      cursor: pointer;
-      transform: scale(1.1);
-      transition: 0.3s;
-    }
-  }
-
-  .score {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-
-    p {
-      margin-left: 8px;
-    }
-  }
-}
-
-.settings {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  flex-direction: column;
-  z-index: 2;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 16px;
-  border: 6px solid gray;
-  border-radius: 12px;
-  width: 400px;
-  height: 300px;
-
-  input {
-    width: 150px;
-    height: 25px;
-    border: 2px solid gray;
-    border-radius: 4px;
-    margin: 8px;
-  }
-
-  p {
-    font-size: 24px;
-  }
-
-  .change-velocity {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .change-velocity p {
-    font-size: 20px;
-  }
-}
-
-.settings-button,
-.close-settings {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 150px;
-  height: 70px;
-  padding: 4px;
-  border: 6px solid gray;
-  border-radius: 16px;
-  background-color: white;
-  color: black;
-  font-size: 24px;
-  margin: 16px;
-
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.2);
-    transition: 0.3s;
-  }
-}
-
-.close-settings {
-  width: 80px;
-  height: 30px;
-  font-size: 20px;
-}
-
 .apple {
   border-radius: 20px;
   background-color: yellow;
-}
-
-.hidden {
-  width: 0;
-  height: 0;
-  display: none;
-  visibility: hidden;
 }
 
 .grid {
@@ -302,4 +173,64 @@ $overlay: rgba(69, 76, 99, 0.852);
 .apple {
   background: yellow;
   border-radius: 20px;
+}
+
+.super-apple {
+  background-color: red;
+  border-radius: 20px;
+  animation-name: changeColor;
+  animation-duration: 0.8s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes changeColor {
+  0% {
+    background-color: red;
+  }
+  50% {
+    background-color: orange;
+  }
+  100% {
+    background-color: red;
+  }
+}
+
+.score-div {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 200px;
+  height: 40px;
+  color: white;
+  font-size: 32px;
+  margin-left: 24px;
+
+  p {
+    margin: 0 8px;
+  }
+}
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  div {
+    margin: 8px;
+  }
+}
+
+.row {
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.hidden {
+  width: 0;
+  height: 0;
+  display: none;
+  visibility: hidden;
 }
