@@ -1,19 +1,18 @@
-export function changeDirection(key: string, ROW_LENGTH: number, lastDirection: number): number {
-    // if (lastDirection === +ROW_LENGTH && key === 'KeyW') return +ROW_LENGTH;
+export function changeDirection(key: string, rowLength: number, lastDirection: number): number {
+    if (lastDirection === +rowLength && key === 'KeyW') return +rowLength;
 
-    // if (lastDirection === -ROW_LENGTH && key === 'KeyS') return -ROW_LENGTH;
+    if (lastDirection === -rowLength && key === 'KeyS') return -rowLength;
 
-    // if (lastDirection === 1 && key === 'KeyA') return 1;
+    if (lastDirection === -1 && key === 'KeyD') return -1;
 
-    // if (lastDirection === -1 && key === 'KeyD') return -1;
+    if (lastDirection === 1 && key === 'KeyA') return 1;
 
     let direction = 1;
 
-    if (key === 'KeyW') direction = -ROW_LENGTH;
-    else if (key === 'KeyS') direction = +ROW_LENGTH;
+    if (key === 'KeyW') direction = -rowLength;
+    else if (key === 'KeyS') direction = +rowLength;
     else if (key === 'KeyA') direction = -1;
     else if (key === 'KeyD') direction = 1;
 
     return direction;
-
 }

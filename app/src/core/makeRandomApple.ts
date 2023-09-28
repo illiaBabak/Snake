@@ -1,7 +1,7 @@
 import { getRandomInteger } from "src/utils/getRandomInteger";
 
 export function makeRandomApple(squares: HTMLDivElement[], appleIndex: number): void {
-    const isSuperApple = getRandomInteger(0, 1)
+    const isSuperApple = getRandomInteger(0, 1);
     let superAppleIndex = 0;
 
     if (isSuperApple == 1) {
@@ -17,6 +17,6 @@ export function makeRandomApple(squares: HTMLDivElement[], appleIndex: number): 
 
     do {
         appleIndex = getRandomInteger(0, squares.length - 1);
-    } while (squares[appleIndex].classList.contains("snake"));
+    } while (squares[appleIndex].classList.contains("snake"))
     squares[appleIndex].classList.add("apple");
 }

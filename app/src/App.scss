@@ -1,6 +1,10 @@
-$container: #28b148;
-$border: #1b7942;
+$container: #151515;
+$border: white;
 $main: #ffc66a;
+$shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #5e0680, 0 0 0.8rem #5e0680, 0 0 2.8rem #5e0680,
+  inset 0 0 1.3rem #5e0680;
+$text-shadow: 0 0 4px #5e0680, 0 0 11px #5e0680, 0 0 19px #5e0680, 0 0 40px #5e0680, 0 0 80px #5e0680, 0 0 90px #5e0680,
+  0 0 100px #5e0680, 0 0 150px #5e0680;
 $overlay: rgba(35, 38, 47, 0.5);
 
 .container,
@@ -11,7 +15,7 @@ $overlay: rgba(35, 38, 47, 0.5);
   justify-content: center;
   align-items: center;
   min-width: 100%;
-  min-height: 100%;
+  height: 100%;
   background-color: $container;
 }
 
@@ -22,8 +26,9 @@ $overlay: rgba(35, 38, 47, 0.5);
   align-items: center;
   width: 1850px;
   height: 900px;
-  border: 4px solid $border;
+  border: 4px solid white;
   border-radius: 16px;
+  box-shadow: $shadow;
 
   div {
     margin: 24px;
@@ -41,6 +46,7 @@ $overlay: rgba(35, 38, 47, 0.5);
   .header p {
     font-size: 40px;
     font-weight: bold;
+    text-shadow: $text-shadow;
   }
 
   .show-tutorial-button {
@@ -52,6 +58,7 @@ $overlay: rgba(35, 38, 47, 0.5);
     padding: 2px;
     border: 4px solid $border;
     border-radius: 16px;
+    box-shadow: $shadow;
 
     &:hover {
       cursor: pointer;
@@ -130,11 +137,12 @@ $overlay: rgba(35, 38, 47, 0.5);
 .main {
   display: flex;
   flex-wrap: wrap;
-  background-color: $main;
+  background-color: #6b0f0f;
   width: 800px;
   height: 800px;
-  border: 2px solid $border;
-  border-radius: 0;
+  border: 4px solid $border;
+  box-shadow: $shadow;
+  border-radius: 16px;
 
   div {
     width: 20px;
@@ -143,7 +151,7 @@ $overlay: rgba(35, 38, 47, 0.5);
 }
 
 .snake {
-  background-color: blue;
+  background-color: $container;
 }
 
 .apple {
@@ -164,15 +172,6 @@ $overlay: rgba(35, 38, 47, 0.5);
   width: 20px;
   height: 20px;
   margin: 1px;
-}
-
-.snake {
-  background: blue;
-}
-
-.apple {
-  background: yellow;
-  border-radius: 20px;
 }
 
 .super-apple {
@@ -205,6 +204,7 @@ $overlay: rgba(35, 38, 47, 0.5);
   color: white;
   font-size: 32px;
   margin-left: 24px;
+  text-shadow: $text-shadow;
 
   p {
     margin: 0 8px;
@@ -214,18 +214,114 @@ $overlay: rgba(35, 38, 47, 0.5);
 .settings {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 88%;
+  width: 300px;
+  color: white;
+  margin-left: 32px;
+  padding-left: 28px;
+  border: 4px solid $border;
+  background-color: $container;
+  border-radius: 16px;
+  box-shadow: $shadow;
 
-  div {
-    margin: 8px;
+  .settings-field {
+    margin-top: 48px;
+  }
+
+  h2 {
+    text-shadow: $text-shadow;
+  }
+}
+
+.color-snake,
+.color-main,
+.size-main,
+.speed {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  p {
+    margin-right: 4px;
+  }
+}
+
+.color-snake-input,
+.color-main-input,
+.select-size {
+  width: 90px;
+  height: 30px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.speed-input {
+  appearance: none;
+  width: 100%;
+  height: 15px;
+  background-color: white;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background-color: $container;
+    cursor: pointer;
+  }
+
+  &::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background-color: $border;
+  }
+}
+
+.start-try-again {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 85%;
+  height: 60px;
+  padding: 2px;
+  border: 6px solid $border;
+  border-radius: 16px;
+  background-color: $container;
+  font-size: 18px;
+  margin-bottom: 16px;
+  box-shadow: $shadow;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: 0.2s;
+  }
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  input,
+  div,
+  select {
+    &:hover {
+      pointer-events: none;
+    }
   }
 }
 
 .row {
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
   flex-direction: row;
+  padding-top: 48px;
 }
 
 .hidden {
