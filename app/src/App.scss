@@ -1,11 +1,19 @@
-$container: #151515;
 $border: white;
-$main: #ffc66a;
-$shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #5e0680, 0 0 0.8rem #5e0680, 0 0 2.8rem #5e0680,
-  inset 0 0 1.3rem #5e0680;
-$text-shadow: 0 0 4px #5e0680, 0 0 11px #5e0680, 0 0 19px #5e0680, 0 0 40px #5e0680, 0 0 80px #5e0680, 0 0 90px #5e0680,
-  0 0 100px #5e0680, 0 0 150px #5e0680;
+$shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem var(--shadow), 0 0 0.8rem var(--shadow), 0 0 2.8rem var(--shadow),
+  inset 0 0 1.3rem var(--shadow);
+$teleport-shadow: 0 0 0.2rem #fff, 0 0 0.2rem #fff, 0 0 2rem #14a427, 0 0 0.8rem #14a427, 0 0 2.8rem #14a427,
+  inset 0 0 1.3rem #14a427;
+
+$text-shadow: 0 0 4px var(--shadow), 0 0 11px var(--shadow), 0 0 19px var(--shadow), 0 0 40px var(--shadow),
+  0 0 80px var(--shadow), 0 0 90px var(--shadow), 0 0 100px var(--shadow), 0 0 150px var(--shadow);
 $overlay: rgba(35, 38, 47, 0.5);
+
+:root {
+  --color-snake: #151515;
+  --field-color: #6b0f0f;
+  --container-color: #151515;
+  --shadow: #5e0680;
+}
 
 .container,
 #root,
@@ -16,12 +24,12 @@ $overlay: rgba(35, 38, 47, 0.5);
   align-items: center;
   min-width: 100%;
   height: 100%;
-  background-color: $container;
+  background-color: var(--container-color);
 }
 
 .overlay-start {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   width: 1850px;
@@ -37,14 +45,14 @@ $overlay: rgba(35, 38, 47, 0.5);
   }
 
   .img-block img {
-    width: 1000px;
-    height: 400px;
+    width: 800px;
+    height: 350px;
     object-fit: cover;
     border-radius: 4px;
   }
 
   .header p {
-    font-size: 40px;
+    font-size: 44px;
     font-weight: bold;
     text-shadow: $text-shadow;
   }
@@ -66,6 +74,62 @@ $overlay: rgba(35, 38, 47, 0.5);
       transition: 0.3s;
     }
   }
+}
+
+.header-presets {
+  font-size: 32px;
+  font-weight: bold;
+  text-shadow: $text-shadow;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+div.list-wrapper {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.list {
+  display: flex;
+  height: 300px;
+  width: 280px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .list-el {
+    text-align: center;
+    margin: 32px 0;
+    opacity: 0.6;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 1;
+    }
+  }
+}
+
+.list::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  box-shadow: $shadow;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background: white;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background: white;
 }
 
 .tutorial-overlay {
@@ -134,10 +198,14 @@ $overlay: rgba(35, 38, 47, 0.5);
   }
 }
 
-.main {
+.map {
   display: flex;
   flex-wrap: wrap;
-  background-color: #6b0f0f;
+  background-color: var(--field-color);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 800px;
   height: 800px;
   border: 4px solid $border;
@@ -151,7 +219,7 @@ $overlay: rgba(35, 38, 47, 0.5);
 }
 
 .snake {
-  background-color: $container;
+  background-color: var(--color-snake);
 }
 
 .apple {
@@ -211,23 +279,31 @@ $overlay: rgba(35, 38, 47, 0.5);
   }
 }
 
+.container-settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 95%;
+}
+
 .settings {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  height: 88%;
+  height: 700px;
   width: 300px;
   color: white;
   margin-left: 32px;
   padding-left: 28px;
   border: 4px solid $border;
-  background-color: $container;
+  background-color: var(--container-color);
   border-radius: 16px;
   box-shadow: $shadow;
 
   .settings-field {
-    margin-top: 48px;
+    margin-top: 42px;
   }
 
   h2 {
@@ -236,9 +312,11 @@ $overlay: rgba(35, 38, 47, 0.5);
 }
 
 .color-snake,
-.color-main,
-.size-main,
-.speed {
+.color-map,
+.size-map,
+.speed,
+.obstacles,
+.teleport {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -251,10 +329,20 @@ $overlay: rgba(35, 38, 47, 0.5);
 }
 
 .color-snake-input,
-.color-main-input,
+.color-map-input,
 .select-size {
   width: 90px;
   height: 30px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.obstacles-input,
+.teleport-input {
+  width: 20px;
+  height: 20px;
 
   &:hover {
     cursor: pointer;
@@ -268,11 +356,15 @@ $overlay: rgba(35, 38, 47, 0.5);
   background-color: white;
   outline: none;
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &::-webkit-slider-thumb {
     appearance: none;
     width: 15px;
     height: 15px;
-    background-color: $container;
+    background-color: var(--container-color);
     cursor: pointer;
   }
 
@@ -283,20 +375,24 @@ $overlay: rgba(35, 38, 47, 0.5);
   }
 }
 
-.start-try-again {
+.start-try-again,
+.pause {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 85%;
+  width: 330px;
   height: 60px;
   padding: 2px;
+  color: white;
   border: 6px solid $border;
   border-radius: 16px;
-  background-color: $container;
+  background-color: var(--container-color);
   font-size: 18px;
   margin-bottom: 16px;
   box-shadow: $shadow;
+  margin: 24px 0 -8px 32px;
+  z-index: 5;
 
   &:hover {
     cursor: pointer;
@@ -305,15 +401,49 @@ $overlay: rgba(35, 38, 47, 0.5);
   }
 }
 
+.pause-div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+  position: absolute;
+  opacity: 0.3;
+  background-color: var(--container-color);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.teleport-el {
+  background-image: url('../public/content/teleport.png');
+  background-size: 100% 100%;
+  box-shadow: $teleport-shadow;
+  animation: rotate 2s linear infinite forwards;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .disabled {
   cursor: not-allowed;
   opacity: 0.6;
   input,
   div,
-  select {
-    &:hover {
-      pointer-events: none;
-    }
+  &:hover {
+    pointer-events: none;
+    cursor: not-allowed;
   }
 }
 

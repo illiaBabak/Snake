@@ -1,13 +1,18 @@
 import { getRandomInteger } from "src/utils/getRandomInteger";
 
-export function makeRandomApple(squares: HTMLDivElement[], appleIndex: number): void {
-    const isSuperApple = getRandomInteger(0, 1);
+const EXCLUDED_CLASS_NAMES = ['snake', 'teleport-el', 'obstacle-el'];
+
+export function makeRandomApple(squares: HTMLDivElement[]): void {
+    const isSuperApple = getRandomInteger(0, 15);
     let superAppleIndex = 0;
+    let appleIndex = 0;
 
     if (isSuperApple == 1) {
-        do {
+        while (true) {
             superAppleIndex = getRandomInteger(0, squares.length - 1);
-        } while (squares[superAppleIndex].classList.contains("snake"));
+            const shouldBreak = !EXCLUDED_CLASS_NAMES.some((className) => squares[superAppleIndex].classList.contains(className));
+            if (shouldBreak) break;
+        }
         squares[superAppleIndex].classList.add('super-apple');
 
         setTimeout(() => {
@@ -15,8 +20,10 @@ export function makeRandomApple(squares: HTMLDivElement[], appleIndex: number): 
         }, 6500);
     }
 
-    do {
+    while (true) {
         appleIndex = getRandomInteger(0, squares.length - 1);
-    } while (squares[appleIndex].classList.contains("snake"))
+        const shouldBreak = !EXCLUDED_CLASS_NAMES.some((className) => squares[appleIndex].classList.contains(className));
+        if (shouldBreak) break;
+    }
     squares[appleIndex].classList.add("apple");
 }

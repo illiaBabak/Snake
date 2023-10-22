@@ -1,7 +1,7 @@
 import { getTargetElement } from "src/utils/getTargetElement";
 import { getTargetElements } from "src/utils/getTargetElements";
 
-export function closeTutorial(currentSnake: number[]): void {
+export function closeTutorial(currentSnake: number[], isSettings: boolean): void {
     const squares = getTargetElements('grid-div', document.getElementsByTagName('div'));
 
     if (!squares) return;
@@ -9,8 +9,13 @@ export function closeTutorial(currentSnake: number[]): void {
     const scoreDiv = getTargetElement('score-div', document.getElementsByTagName('div'));
     scoreDiv?.classList.remove('hidden');
 
-    const settings = getTargetElement('settings', document.getElementsByTagName('div'));
-    settings?.classList.remove('hidden');
+    const containerSettings = getTargetElement('container-settings', document.getElementsByTagName('div'));
+    containerSettings?.classList.remove('hidden');
+
+    if (isSettings) {
+        const settings = getTargetElement('settings', document.getElementsByTagName('div'));
+        settings?.classList.remove('hidden');
+    }
 
     const container = getTargetElement('container', document.getElementsByTagName('div'));
     container?.classList.add('row');
