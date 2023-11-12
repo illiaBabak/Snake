@@ -7,6 +7,6 @@ export function createMap(size: number, map: HTMLDivElement): void {
         map.appendChild(div);
     }
 
-    map.style.width = `${size * 20}px`;
-    map.style.height = `${size * 20}px`;
+    map.style.width = `${size * 16}px`;
+    map.style.height = `${size * 16}px`;
 }

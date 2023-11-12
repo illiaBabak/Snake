@@ -1,6 +1,6 @@
 import { getTargetElement } from "src/utils/getTargetElement";
 
-export function isGameOver(squares: HTMLDivElement[], direction: number, rowLength: number, currentSnake: number[]): boolean {
+export function checkIsGameOver(squares: HTMLDivElement[], direction: number, rowLength: number, currentSnake: number[]): boolean {
     if (currentSnake[0] + direction === 0) return false;
 
     if (squares[currentSnake[0]].classList.contains('teleport-el') && squares[currentSnake[0] + direction].classList.contains('obstacle-el')) return false;

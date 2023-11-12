@@ -1,1 +1,0 @@
-export type SelectChangeEvent = Event & { target: HTMLSelectElement };

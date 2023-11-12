@@ -1,4 +1,4 @@
-import { MAX_CHANCE } from "src/constants/constants";
+import { MAX_CHANCE } from "src/variables/constants";
 import { getRandomInteger } from "src/utils/getRandomInteger";
 import { makeRandomObstacles } from "./makeRandomObstacles";
 
