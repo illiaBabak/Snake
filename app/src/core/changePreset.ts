@@ -4,7 +4,7 @@ import { getCoreElements } from "./getCoreElements";
 import { gameSettings } from "src/variables/variables";
 import { createMap } from "./createMap";
 
-export function changePreset({ shouldObstacles, shouldTeleport, speed, mapSize, animationImg, shouldAnimation, shouldDirectionFlip, shouldMapFlip, showSettings, colorSnake, fieldColor, colorPage, startImg, shadowColor }: Preset, colorSnakeGame: string, colorMap: string, shouldShowSettings: boolean): { colorSnakeGame: string, colorMap: string, shouldShowSettings: boolean } {
+export function changePreset({ shouldChangeSpeed, shouldOpacity, shouldChangeColor, shouldObstacles, shouldTeleport, speed, mapSize, animationImg, shouldAnimation, shouldDirectionFlip, shouldMapFlip, showSettings, colorSnake, fieldColor, colorPage, startImg, shadowColor }: Preset, colorSnakeGame: string, colorMap: string, shouldShowSettings: boolean): { colorSnakeGame: string, colorMap: string, shouldShowSettings: boolean } {
     const root = document.documentElement;
     const { teleportInput, obstaclesInput, speedInput, speedText, colorSnakeInput, settings, map, sizeMap, colorMapInput } = getCoreElements();
 
@@ -27,6 +27,9 @@ export function changePreset({ shouldObstacles, shouldTeleport, speed, mapSize, 
     gameSettings.newSpeed = speed;
     gameSettings.shouldUseObstacles = shouldObstacles;
     gameSettings.shouldUseTeleports = shouldTeleport;
+    gameSettings.randomColorSnake = shouldChangeColor;
+    gameSettings.shouldOpacityChange = shouldOpacity;
+    gameSettings.shouldSpeedChange = shouldChangeSpeed;
 
     if (obstaclesInput) obstaclesInput.checked = gameSettings.shouldUseObstacles;
 

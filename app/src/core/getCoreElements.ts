@@ -44,7 +44,7 @@ type ReturnValue = {
     closeModalButton?: HTMLDivElement;
     acceptButton?: HTMLDivElement;
     newSpeedText?: HTMLParagraphElement;
-    directionMessage?: HTMLDivElement;
+    featureMessage?: HTMLDivElement;
 }
 
 export function getCoreElements(): ReturnValue {
@@ -90,10 +90,10 @@ export function getCoreElements(): ReturnValue {
     const shouldTeleport = getTargetElement('new-teleport-input', document.getElementsByTagName('input'));
     const shouldAnimation = getTargetElement('set-animation', document.getElementsByTagName('input'));
     const newMapSize = getTargetElement('new-map-size', document.getElementsByTagName('select'));
-    const directionMessage = getTargetElement('direction-message', document.getElementsByTagName('div'));
+    const featureMessage = getTargetElement('feature-message', document.getElementsByTagName('div'));
 
     const closeModalButton = getTargetElement('cancel', document.getElementsByTagName('div'));
     const acceptButton = getTargetElement('accept', document.getElementsByTagName('div'));
 
-    return { container, directionMessage, newSpeedText, acceptButton, closeModalButton, newMapSize, shouldAnimation, shouldTeleport, shouldObstacles, animationImg, newSpeedInput, setAnimation, mapFlip, directionFlip, changeSpeed, changeOpacity, changeColor, headerText, presetText, showSettingsCheck, newColorField, newColorSnake, newColorShadow, newColorPage, newStartImg, overlayStart, tutorialOverlay, addPresetButton, map, panel, showTutorialButton, closeTutorialButton, startButton, speedInput, speedText, colorSnakeInput, colorMapInput, sizeMap, settings, pauseButton, obstaclesInput, teleportInput, listEls };
+    return { container, featureMessage, newSpeedText, acceptButton, closeModalButton, newMapSize, shouldAnimation, shouldTeleport, shouldObstacles, animationImg, newSpeedInput, setAnimation, mapFlip, directionFlip, changeSpeed, changeOpacity, changeColor, headerText, presetText, showSettingsCheck, newColorField, newColorSnake, newColorShadow, newColorPage, newStartImg, overlayStart, tutorialOverlay, addPresetButton, map, panel, showTutorialButton, closeTutorialButton, startButton, speedInput, speedText, colorSnakeInput, colorMapInput, sizeMap, settings, pauseButton, obstaclesInput, teleportInput, listEls };
 }

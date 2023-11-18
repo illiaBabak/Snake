@@ -312,6 +312,7 @@ div.list-panel {
   align-items: center;
   justify-content: flex-end;
   height: 95%;
+  z-index: 3;
 }
 
 .settings {
@@ -606,7 +607,7 @@ div.delete-button {
 
 .error-message,
 .error-message-modal,
-.direction-message {
+.feature-message {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -627,9 +628,10 @@ div.delete-button {
   }
 }
 
-.direction-message {
+.feature-message {
   background-color: #14a427;
   font-size: 16px;
+  text-align: center;
 }
 
 .error-message {

@@ -6,7 +6,10 @@ export const gameSettings = {
     isDirectionFlip: false,
     animationImg: '',
     mapSize: '40',
+    newSpeed: '4',
+    randomColorSnake: false,
+    shouldOpacityChange: false,
     shouldUseObstacles: false,
     shouldUseTeleports: false,
-    newSpeed: '4',
+    shouldSpeedChange: false,
 }

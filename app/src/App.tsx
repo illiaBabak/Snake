@@ -37,6 +37,9 @@ import { openOrCloseModal } from './core/openOrCloseModal';
 import { rotateMap } from './core/rotateMap';
 import { animateBackground } from './core/animateBackground';
 import { getRandomInteger } from './utils/getRandomInteger';
+import { changeRandomColor } from './core/changeRandomColor';
+import { changeOpacity } from './core/changeOpacity';
+import { showFeatureMsg } from './core/showFeatureMsg';
 
 function App(): JSX.Element {
   const keysPressed: KeysPressed = {};
@@ -50,6 +53,7 @@ function App(): JSX.Element {
   let isGameOver = false;
   let canPressKey = true;
   let rotateDirection = false;
+  let isChangeOpacity = false;
 
   useEffect(() => {
     const {
@@ -315,9 +319,8 @@ function App(): JSX.Element {
   }
 
   function eatApple(squares: HTMLDivElement[], tail: number): void {
-    const { isMapFlip, isDirectionFlip } = gameSettings;
-    const { map, directionMessage } = getCoreElements();
-    if (!interval || !map || !directionMessage) return;
+    const { map, colorSnakeInput } = getCoreElements();
+    if (!interval || !map || !colorSnakeInput) return;
 
     if (
       squares[currentSnake[0]].classList.contains('super-apple') ||
@@ -330,16 +333,38 @@ function App(): JSX.Element {
 
         removeClasses(squares, CLASSES_TO_REMOVE_IN_APPLE);
 
-        if (isDirectionFlip) {
-          rotateDirection = !rotateDirection;
-          directionMessage.classList.remove('hidden');
+        if (gameSettings.isDirectionFlip) rotateDirection = !rotateDirection;
 
-          setTimeout(() => {
-            directionMessage.classList.add('hidden');
-          }, 1200);
+        if (gameSettings.randomColorSnake) {
+          gameSettings.colorSnakeGame = changeRandomColor();
+          colorSnakeInput.value = gameSettings.colorSnakeGame;
         }
 
-        if (isMapFlip) rotateMap(map);
+        if (gameSettings.shouldOpacityChange) {
+          isChangeOpacity = !isChangeOpacity;
+          changeOpacity(isChangeOpacity);
+        }
+
+        if (gameSettings.shouldSpeedChange && score % 3 === 0) {
+          const normalIntervalTime = intervalTime;
+
+          intervalTime *= ACCELERATION_FACTOR / 2;
+
+          setTimeout(() => {
+            if (interval) clearInterval(interval);
+            intervalTime = normalIntervalTime;
+            interval = setInterval(moveOutcome, intervalTime);
+          }, 1800);
+        }
+
+        showFeatureMsg(
+          gameSettings.isDirectionFlip,
+          gameSettings.shouldOpacityChange,
+          gameSettings.shouldSpeedChange,
+          score
+        );
+
+        if (gameSettings.isMapFlip) rotateMap(map);
         if (gameSettings.shouldUseObstacles) generateObstacles(squares, score, rowLength);
         if (score >= 5 && gameSettings.shouldUseTeleports) generateTeleports(squares, score, rowLength);
       } else loopN = 5;
@@ -384,7 +409,7 @@ function App(): JSX.Element {
         </div>
       </div>
 
-      <div className='direction-message hidden'>Change of direction!</div>
+      <div className='feature-message hidden'></div>
 
       <div className='error-message hidden'></div>
 
