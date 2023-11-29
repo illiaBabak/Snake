@@ -1,61 +1,75 @@
-import { Preset } from "src/types/preset";
-import { getTargetElement } from "src/utils/getTargetElement";
-import { getCoreElements } from "./getCoreElements";
-import { gameSettings } from "src/variables/variables";
-import { createMap } from "./createMap";
+import { Preset } from 'src/types/preset';
+import { getCoreElements } from './getCoreElements';
+import { gameSettings } from 'src/variables/variables';
+import { createMap } from './createMap';
+import { KeyOfPreset } from 'src/types/otherTypes';
 
-export function changePreset({ shouldChangeSpeed, shouldOpacity, shouldChangeColor, shouldObstacles, shouldTeleport, speed, mapSize, animationImg, shouldAnimation, shouldDirectionFlip, shouldMapFlip, showSettings, colorSnake, fieldColor, colorPage, startImg, shadowColor }: Preset, colorSnakeGame: string, colorMap: string, shouldShowSettings: boolean): { colorSnakeGame: string, colorMap: string, shouldShowSettings: boolean } {
-    const root = document.documentElement;
-    const { teleportInput, obstaclesInput, speedInput, speedText, colorSnakeInput, settings, map, sizeMap, colorMapInput } = getCoreElements();
+export function changePreset(preset: Preset): void {
+  const root = document.documentElement;
+  const {
+    teleportInput,
+    obstaclesInput,
+    speedInput,
+    speedText,
+    colorSnakeInput,
+    settings,
+    map,
+    sizeMap,
+    colorMapInput,
+    startImgDiv,
+  } = getCoreElements();
 
-    const img = getTargetElement('start-img', document.getElementsByTagName('img'));
-    if (img) img.setAttribute('src', startImg);
+  const {
+    startImg,
+    colorSnake,
+    fieldColor,
+    colorPage,
+    shadowColor,
+    shouldObstacles,
+    shouldTeleport,
+    speed,
+    shouldShowSettings,
+    mapSize,
+  } = preset;
 
-    root.style.setProperty('--color-snake', colorSnake);
-    root.style.setProperty('--field-color', fieldColor);
-    root.style.setProperty('--container-color', colorPage);
-    root.style.setProperty('--shadow', shadowColor);
+  if (
+    !startImgDiv ||
+    !obstaclesInput ||
+    !teleportInput ||
+    !speedInput ||
+    !speedText ||
+    !colorSnakeInput ||
+    !colorMapInput ||
+    !sizeMap ||
+    !settings ||
+    !map
+  )
+    return;
 
-    colorSnakeGame = colorSnake;
-    colorMap = fieldColor;
-    shouldShowSettings = showSettings;
-    gameSettings.isMapFlip = shouldMapFlip;
-    gameSettings.isDirectionFlip = shouldDirectionFlip;
-    gameSettings.mapSize = mapSize;
-    gameSettings.colorSnakeGame = colorSnake;
-    gameSettings.colorMap = fieldColor;
-    gameSettings.newSpeed = speed;
-    gameSettings.shouldUseObstacles = shouldObstacles;
-    gameSettings.shouldUseTeleports = shouldTeleport;
-    gameSettings.randomColorSnake = shouldChangeColor;
-    gameSettings.shouldOpacityChange = shouldOpacity;
-    gameSettings.shouldSpeedChange = shouldChangeSpeed;
+  startImgDiv.setAttribute('src', startImg);
 
-    if (obstaclesInput) obstaclesInput.checked = gameSettings.shouldUseObstacles;
+  root.style.setProperty('--color-snake', colorSnake);
+  root.style.setProperty('--field-color', fieldColor);
+  root.style.setProperty('--container-color', colorPage);
+  root.style.setProperty('--shadow', shadowColor);
 
-    if (teleportInput) teleportInput.checked = gameSettings.shouldUseTeleports;
+  const presetKeys = Object.keys(preset) as KeyOfPreset[];
+  const parsedGameSettings = gameSettings as Record<string, boolean | string>;
+  presetKeys.forEach((key) => {
+    parsedGameSettings[key] = preset[key];
+  });
 
-    if (speedText && speedInput) {
-        speedText.innerText = gameSettings.newSpeed;
-        speedInput.value = gameSettings.newSpeed.toString();
-    }
+  obstaclesInput.checked = shouldObstacles;
+  teleportInput.checked = shouldTeleport;
 
-    if (colorMapInput) colorMapInput.value = gameSettings.colorMap;
+  speedText.innerText = speed;
+  speedInput.value = speed.toString();
 
-    if (colorSnakeInput) colorSnakeInput.value = gameSettings.colorSnakeGame;
+  colorMapInput.value = fieldColor;
+  colorSnakeInput.value = colorSnake;
 
-    if (map && sizeMap) {
-        createMap(Number(gameSettings.mapSize), map);
-        sizeMap.value = gameSettings.mapSize;
-    }
+  createMap(Number(mapSize), map);
+  sizeMap.value = mapSize;
 
-    if (shouldAnimation) gameSettings.animationImg = animationImg;
-
-    if (!shouldShowSettings && settings) settings.classList.add('hidden');
-
-    return {
-        colorSnakeGame,
-        colorMap,
-        shouldShowSettings,
-    };
+  if (!shouldShowSettings) settings.classList.add('hidden');
 }

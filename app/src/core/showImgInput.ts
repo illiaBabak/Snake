@@ -1,8 +1,8 @@
 import { CheckBoxChangeEvent } from "src/types/eventTypes";
-import { getTargetElement } from "src/utils/getTargetElement";
+import { getCoreElements } from "./getCoreElements";
 
 export function showImgInput(e: CheckBoxChangeEvent): void {
-    const lineAnimation = getTargetElement('line-animation-img', document.getElementsByTagName('div'));
+    const { lineAnimation } = getCoreElements();
     if (!lineAnimation) return;
 
     lineAnimation.classList.add('disabled');

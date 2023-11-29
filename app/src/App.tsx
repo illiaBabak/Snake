@@ -1,10 +1,5 @@
 import './App.scss';
 import { useEffect } from 'react';
-import { getTargetElement } from './utils/getTargetElement';
-import { getTargetElements } from './utils/getTargetElements';
-import { changeDirection } from './core/changeDirection';
-import { makeRandomApple } from './core/makeRandomApple';
-import { checkIsGameOver } from './core/checkIsGameOver';
 import { changeColorSnake } from './core/changeColorSnake';
 import { changeColorMap } from './core/changeColorMap';
 import { changeSizeMap } from './core/changeSizeMap';
@@ -12,49 +7,22 @@ import { changeSpeed } from './core/changeSpeed';
 import { getCoreElements } from './core/getCoreElements';
 import { pauseOrRestartGame } from './core/pauseOrRestartGame';
 import { CheckBoxChangeEvent, SelectChangeEvent } from './types/eventTypes';
-import { ACCELERATION_FACTOR } from './variables/constants';
 import { SPEED_MAP } from './variables/constants';
-import { generateObstacles } from './core/generateObstacles';
-import { CLASSES_TO_REMOVE_IN_APPLE } from './variables/constants';
-import { removeClasses } from './core/removeClasses';
-import { CLASSES_TO_REMOVE_AFTER_START } from './variables/constants';
-import { generateTeleports } from './core/generateTeleports';
-import { KEY_PRESS_COOLDOWN } from './variables/constants';
-import { addEventListeners } from './core/addEventListeners';
-import { moveSnakeParts } from './core/moveSnakeParts';
-import { gameSettings } from './variables/variables';
-import { addPresetsListeners } from './core/addPresetsListeners';
+import { defaultSettings, gameSettings } from './variables/variables';
 import { showTutorial } from './core/showTutorial';
 import { closeTutorial } from './core/closeTutorial';
 import { removePresetsListeners } from './core/removePresetsListeners';
-import { KeysPressed } from './types/preset';
 import { keysToOpenPanel } from './variables/constants';
 import { openOrCloseAdminPanel } from './core/openOrCloseAdminPanel';
-import { createListPresets } from './core/createListPresets';
 import { showImgInput } from './core/showImgInput';
 import { handleInput } from './core/handleInput';
 import { openOrCloseModal } from './core/openOrCloseModal';
-import { rotateMap } from './core/rotateMap';
-import { animateBackground } from './core/animateBackground';
-import { getRandomInteger } from './utils/getRandomInteger';
-import { changeRandomColor } from './core/changeRandomColor';
-import { changeOpacity } from './core/changeOpacity';
-import { showFeatureMsg } from './core/showFeatureMsg';
+import { endSwap, startSwap } from './core/swapDirection';
+import { startGame } from './core/startGame';
+import { moveOutcome } from './core/moveOutcome';
+import { addEventListeners } from './core/addEventListeners';
 
 function App(): JSX.Element {
-  const keysPressed: KeysPressed = {};
-  let currentSnake = [3, 2, 1];
-  let direction = 1;
-  let score = 0;
-  let intervalTime = 700;
-  let interval: NodeJS.Timeout | null = null;
-  let rowLength = 40;
-  let isPaused = false;
-  let isGameOver = false;
-  let canPressKey = true;
-  let rotateDirection = false;
-  let isChangeOpacity = false;
-
   useEffect(() => {
     const {
       overlayStart,
@@ -73,12 +41,10 @@ function App(): JSX.Element {
       pauseButton,
       obstaclesInput,
       teleportInput,
-      listEls,
       addPresetButton,
       setAnimation,
       newSpeedInput,
       closeModalButton,
-      acceptButton,
       newSpeedText,
     } = getCoreElements();
 
@@ -99,21 +65,15 @@ function App(): JSX.Element {
       !pauseButton ||
       !obstaclesInput ||
       !teleportInput ||
-      !listEls ||
       !addPresetButton ||
       !setAnimation ||
       !newSpeedInput ||
       !closeModalButton ||
-      !acceptButton ||
       !newSpeedText
     )
       return;
 
-    addEventListeners(currentSnake);
-
-    createListPresets();
-
-    addPresetsListeners();
+    addEventListeners(defaultSettings.currentSnake);
 
     startButton.addEventListener('click', startGame);
     closeModalButton.addEventListener('click', handleOpenModal);
@@ -127,6 +87,9 @@ function App(): JSX.Element {
     obstaclesInput.addEventListener('change', (e) => handleObstaclesInputChange(e as CheckBoxChangeEvent));
     teleportInput.addEventListener('change', (e) => handleTeleportInputChange(e as CheckBoxChangeEvent));
     setAnimation.addEventListener('change', (e) => showImgInput(e as CheckBoxChangeEvent));
+
+    document.addEventListener('touchstart', startSwap);
+    document.addEventListener('touchend', endSwap);
 
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
@@ -148,10 +111,15 @@ function App(): JSX.Element {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
 
+      document.removeEventListener('touchstart', startSwap);
+      document.removeEventListener('touchend', endSwap);
+
       removePresetsListeners();
 
       showTutorialButton.removeEventListener('click', () => showTutorial(overlayStart, tutorialOverlay));
-      closeTutorialButton.removeEventListener('click', () => closeTutorial(currentSnake, tutorialOverlay, map));
+      closeTutorialButton.removeEventListener('click', () =>
+        closeTutorial(defaultSettings.currentSnake, tutorialOverlay, map)
+      );
 
       document.removeEventListener('keydown', restartGameUsingKeyboard);
       document.removeEventListener('keyup', pauseGameUsingKeyboard);
@@ -168,55 +136,55 @@ function App(): JSX.Element {
 
   function handleSpeedInput(input: HTMLInputElement, speedText: HTMLParagraphElement) {
     speedText.innerText = input.value;
-    intervalTime = changeSpeed(input.value, SPEED_MAP);
+    defaultSettings.intervalTime = changeSpeed(input.value, SPEED_MAP);
   }
 
   function handleColorSnakeInput(input: HTMLInputElement) {
-    gameSettings.colorSnakeGame = input.value;
-    changeColorSnake(gameSettings.colorSnakeGame);
+    gameSettings.colorSnake = input.value;
+    changeColorSnake(gameSettings.colorSnake);
   }
 
   function handleColorMapInput(input: HTMLInputElement) {
-    gameSettings.colorMap = input.value;
-    changeColorMap(gameSettings.colorMap);
+    gameSettings.fieldColor = input.value;
+    changeColorMap(gameSettings.fieldColor);
   }
 
   function handleSizeMapChange(e: SelectChangeEvent) {
-    rowLength = changeSizeMap(e, rowLength);
-    gameSettings.mapSize = rowLength.toString();
+    changeSizeMap(e);
+    gameSettings.mapSize = defaultSettings.rowLength.toString();
   }
 
   function handleObstaclesInputChange(e: CheckBoxChangeEvent) {
-    gameSettings.shouldUseObstacles = e.target.checked;
+    gameSettings.shouldObstacles = e.target.checked;
   }
 
   function handleTeleportInputChange(e: CheckBoxChangeEvent) {
-    gameSettings.shouldUseTeleports = e.target.checked;
+    gameSettings.shouldTeleport = e.target.checked;
   }
 
   function handleKeyDown(e: KeyboardEvent) {
-    keysPressed[e.key] = true;
-    const isOpenPanel = keysToOpenPanel.every((key) => keysPressed[key]);
+    defaultSettings.keysPressed[e.key] = true;
+    const isOpenPanel = keysToOpenPanel.every((key) => defaultSettings.keysPressed[key]);
     const { map } = getCoreElements();
 
     if (isOpenPanel && map && map.classList.contains('hidden')) openOrCloseAdminPanel();
   }
 
   function handleKeyUp(e: KeyboardEvent) {
-    delete keysPressed[e.key];
+    delete defaultSettings.keysPressed[e.key];
   }
 
   function handlePause(e: MouseEvent | KeyboardEvent) {
-    if (isGameOver || !interval) return;
+    if (defaultSettings.isGameOver || !defaultSettings.interval) return;
 
     const { pauseButton } = getCoreElements();
 
     e.stopPropagation();
 
-    if (!isPaused) clearInterval(interval);
-    else interval = setInterval(moveOutcome, intervalTime);
+    if (!defaultSettings.isPaused) clearInterval(defaultSettings.interval);
+    else defaultSettings.interval = setInterval(moveOutcome, defaultSettings.intervalTime);
 
-    isPaused = pauseOrRestartGame(pauseButton, isPaused);
+    defaultSettings.isPaused = pauseOrRestartGame(pauseButton, defaultSettings.isPaused);
   }
 
   function pauseGameUsingKeyboard(e: KeyboardEvent) {
@@ -224,168 +192,17 @@ function App(): JSX.Element {
   }
 
   function restartGameUsingKeyboard(e: KeyboardEvent) {
-    const { overlayStart, tutorialOverlay } = getCoreElements();
-    if (!overlayStart || !tutorialOverlay) return;
+    const { overlayStart, tutorialOverlay, settings } = getCoreElements();
+    if (!overlayStart || !tutorialOverlay || !settings) return;
 
     if (
       e.code === 'Enter' &&
-      !isPaused &&
+      !defaultSettings.isPaused &&
       overlayStart.classList.contains('hidden') &&
-      tutorialOverlay.classList.contains('hidden')
+      tutorialOverlay.classList.contains('hidden') &&
+      !settings.classList.contains('disabled-settings')
     )
       startGame();
-  }
-
-  function startGame(): void {
-    const squares = getTargetElements('grid-div', document.getElementsByTagName('div'));
-    const settings = getTargetElement('settings', document.getElementsByTagName('div'));
-    const startButton = getTargetElement('start-try-again', document.getElementsByTagName('div'));
-    const speedInput = getTargetElement('speed-input', document.getElementsByTagName('input'));
-    const scoreP = getTargetElement('score', document.getElementsByTagName('p'));
-
-    if (!squares || !settings || !speedInput || !scoreP || !startButton) return;
-
-    if (!settings.classList.contains('hidden')) intervalTime = changeSpeed(speedInput.value, SPEED_MAP);
-
-    if (gameSettings.animationImg) {
-      let counter = 0;
-      setInterval(() => {
-        const timer = getRandomInteger(10, 40);
-        counter += 50 + timer * 20;
-
-        setTimeout(() => {
-          animateBackground(gameSettings.animationImg);
-        }, counter);
-      }, 50);
-    }
-
-    isGameOver = false;
-    rotateDirection = false;
-    currentSnake = [3, 2, 1];
-    direction = 1;
-    rowLength = Number(gameSettings.mapSize);
-
-    score = 0;
-    scoreP.innerText = score.toString();
-
-    removeClasses(squares, CLASSES_TO_REMOVE_AFTER_START.concat(CLASSES_TO_REMOVE_IN_APPLE));
-
-    settings.classList.add('disabled');
-    startButton.classList.add('disabled');
-    startButton.removeEventListener('click', startGame);
-
-    makeRandomApple(squares);
-
-    interval = setInterval(moveOutcome, intervalTime);
-
-    document.addEventListener('keydown', (e) => {
-      if (!['KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(e.code) || !canPressKey) return;
-      direction = changeDirection(e.code, rowLength, direction, rotateDirection);
-
-      canPressKey = false;
-      setTimeout(() => {
-        canPressKey = true;
-      }, intervalTime * KEY_PRESS_COOLDOWN);
-    });
-  }
-
-  function moveOutcome(): void {
-    const settings = getTargetElement('settings', document.getElementsByTagName('div'));
-    const startButton = getTargetElement('start-try-again', document.getElementsByTagName('div'));
-    const squares = getTargetElements('grid-div', document.getElementsByTagName('div'));
-
-    if (!settings || !startButton) return;
-
-    if (checkIsGameOver(squares, direction, rowLength, currentSnake) && interval) {
-      isGameOver = true;
-      clearInterval(interval);
-      settings.classList.remove('disabled');
-      startButton.addEventListener('click', startGame);
-    } else moveSnake(squares);
-  }
-
-  function moveSnake(squares: HTMLDivElement[]): void {
-    if (!squares) return;
-
-    const tail = currentSnake.pop();
-
-    if (tail) squares[tail].classList.remove('snake');
-    else squares[0].classList.remove('snake');
-
-    moveSnakeParts(squares, currentSnake, direction);
-    changeColorSnake(gameSettings.colorSnakeGame);
-
-    if (tail) eatApple(squares, tail);
-  }
-
-  function eatApple(squares: HTMLDivElement[], tail: number): void {
-    const { map, colorSnakeInput } = getCoreElements();
-    if (!interval || !map || !colorSnakeInput) return;
-
-    if (
-      squares[currentSnake[0]].classList.contains('super-apple') ||
-      squares[currentSnake[0]].classList.contains('apple')
-    ) {
-      let loopN = 1;
-      if (squares[currentSnake[0]].classList.contains('apple')) {
-        squares[currentSnake[0]].classList.remove('apple');
-        makeRandomApple(squares);
-
-        removeClasses(squares, CLASSES_TO_REMOVE_IN_APPLE);
-
-        if (gameSettings.isDirectionFlip) rotateDirection = !rotateDirection;
-
-        if (gameSettings.randomColorSnake) {
-          gameSettings.colorSnakeGame = changeRandomColor();
-          colorSnakeInput.value = gameSettings.colorSnakeGame;
-        }
-
-        if (gameSettings.shouldOpacityChange) {
-          isChangeOpacity = !isChangeOpacity;
-          changeOpacity(isChangeOpacity);
-        }
-
-        if (gameSettings.shouldSpeedChange && score % 3 === 0) {
-          const normalIntervalTime = intervalTime;
-
-          intervalTime *= ACCELERATION_FACTOR / 2;
-
-          setTimeout(() => {
-            if (interval) clearInterval(interval);
-            intervalTime = normalIntervalTime;
-            interval = setInterval(moveOutcome, intervalTime);
-          }, 1800);
-        }
-
-        showFeatureMsg(
-          gameSettings.isDirectionFlip,
-          gameSettings.shouldOpacityChange,
-          gameSettings.shouldSpeedChange,
-          score
-        );
-
-        if (gameSettings.isMapFlip) rotateMap(map);
-        if (gameSettings.shouldUseObstacles) generateObstacles(squares, score, rowLength);
-        if (score >= 5 && gameSettings.shouldUseTeleports) generateTeleports(squares, score, rowLength);
-      } else loopN = 5;
-
-      squares[currentSnake[0]].classList.remove('super-apple');
-      squares[tail].classList.add('snake');
-
-      changeColorSnake(gameSettings.colorSnakeGame);
-      clearInterval(interval);
-
-      for (let i = 0; i < loopN; i++) {
-        currentSnake.push(tail);
-        intervalTime = intervalTime * ACCELERATION_FACTOR;
-      }
-
-      interval = setInterval(moveOutcome, intervalTime);
-
-      score += loopN;
-      const scoreP = getTargetElement('score', document.getElementsByTagName('p'));
-      if (scoreP) scoreP.innerText = score.toString();
-    }
   }
 
   return (
@@ -493,7 +310,7 @@ function App(): JSX.Element {
 
                 <div className='line'>
                   <label>
-                    <h3>Speed</h3>
+                    <h3 className='h3-left'>Speed</h3>
                     <input
                       type='range'
                       min={1}
@@ -508,7 +325,7 @@ function App(): JSX.Element {
                 </div>
 
                 <div className='line'>
-                  <h3>Map size</h3>
+                  <h3 className='h3-left'>Map size</h3>
                   <select className='select-size new-map-size' name='mapSize' onChange={handleInput}>
                     <option value={'40'}>40x40</option>
                     <option value={'30'}>30x30</option>
@@ -627,7 +444,7 @@ function App(): JSX.Element {
           <div className='add-preset disabled'>Add new preset</div>
         </div>
 
-        <div className='column'>
+        <div className='column column-presets'>
           <h1 className='header-presets'>PRESETS</h1>
           <div className='list list-panel'>
             <div className='list-wrapper-panel'></div>

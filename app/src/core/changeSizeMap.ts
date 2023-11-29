@@ -1,18 +1,16 @@
-import { getTargetElement } from "src/utils/getTargetElement";
 import { createMap } from "./createMap";
+import { defaultSettings } from "src/variables/variables";
+import { getCoreElements } from "./getCoreElements";
 
 type SelectChangeEvent = Event & { target: HTMLSelectElement };
 
-export function changeSizeMap(e: SelectChangeEvent, rowLength: number): number {
+export function changeSizeMap(e: SelectChangeEvent): void {
     const { target } = e;
-    const map = getTargetElement('map', document.getElementsByTagName('div'));
+    const { value } = target;
+    const { map } = getCoreElements();
 
-    if (target && map) {
-        const { value } = target;
+    if (!map) return;
 
-        createMap(Number(value), map);
-
-        rowLength = Number(value);
-    }
-    return rowLength;
+    createMap(Number(value), map);
+    defaultSettings.rowLength = Number(value);
 }

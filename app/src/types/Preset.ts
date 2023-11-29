@@ -1,7 +1,7 @@
 export type Preset = {
     key: string;
     name: string;
-    showSettings: boolean;
+    shouldShowSettings: boolean;
     colorSnake: string;
     fieldColor: string;
     colorPage: string;

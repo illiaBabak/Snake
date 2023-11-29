@@ -1,14 +1,14 @@
 import { Preset } from "src/types/preset";
 export const PRESET_KEYS = [
     'key', 'name', 'speed', 'mapSize', 'fieldColor', 'colorSnake', "startImg", "animationImg", "colorPage", "shadowColor",
-    'showSettings', 'shouldMapFlip', 'shouldDirectionFlip', 'shouldChangeSpeed', 'shouldOpacity', 'shouldChangeColor', 'shouldObstacles',
+    'shouldShowSettings', 'shouldMapFlip', 'shouldDirectionFlip', 'shouldChangeSpeed', 'shouldOpacity', 'shouldChangeColor', 'shouldObstacles',
     'shouldTeleport', 'shouldAnimation'
 ] as const;
 
-export const ACCELERATION_FACTOR = 0.96;
+export const ACCELERATION_FACTOR = 0.95;
 export const CLASSES_TO_REMOVE_AFTER_START = ['snake', 'apple', 'super-apple'];
 export const CLASSES_TO_REMOVE_IN_APPLE = ['first-teleport', 'second-teleport', 'teleport-el', 'obstacle-el'];
-export const KEY_PRESS_COOLDOWN = 0.5;
+export const KEY_PRESS_COOLDOWN = 0.485;
 export const MAX_CHANCE = 15;
 export const SPEED_MAP = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 export const keysToOpenPanel = ['a', 's', '8'];
@@ -17,7 +17,7 @@ export const DEFAULT_PRESETS: Preset[] = [
     {
         key: '1',
         name: 'Classic',
-        showSettings: true,
+        shouldShowSettings: true,
         colorSnake: '#151515',
         fieldColor: '#6b0f0f',
         colorPage: '#151515',
@@ -38,7 +38,7 @@ export const DEFAULT_PRESETS: Preset[] = [
     {
         key: '2',
         name: 'Horror',
-        showSettings: false,
+        shouldShowSettings: false,
         colorSnake: 'white',
         fieldColor: '#121212',
         colorPage: '#121212',
@@ -60,7 +60,7 @@ export const DEFAULT_PRESETS: Preset[] = [
     {
         key: '3',
         name: 'Halloween',
-        showSettings: false,
+        shouldShowSettings: false,
         colorSnake: '#f16623',
         fieldColor: 'orange',
         colorPage: '#f16623',
@@ -81,7 +81,7 @@ export const DEFAULT_PRESETS: Preset[] = [
     {
         key: '4',
         name: 'Winter',
-        showSettings: false,
+        shouldShowSettings: false,
         colorSnake: '#6bc4fe',
         fieldColor: 'white',
         colorPage: '#6bc4fe',
@@ -102,7 +102,7 @@ export const DEFAULT_PRESETS: Preset[] = [
     {
         key: '5',
         name: 'Jungle',
-        showSettings: false,
+        shouldShowSettings: false,
         colorSnake: '#8cb708',
         fieldColor: '#008001',
         colorPage: '#8cb708',

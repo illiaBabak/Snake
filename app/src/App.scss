@@ -25,6 +25,11 @@ $overlay: rgba(35, 38, 47, 0.5);
   min-width: 100%;
   height: 100%;
   background-color: var(--container-color);
+  overflow: auto;
+}
+
+.container {
+  position: relative;
 }
 
 .overlay-start {
@@ -32,8 +37,8 @@ $overlay: rgba(35, 38, 47, 0.5);
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 1850px;
-  height: 900px;
+  width: 95vw;
+  height: 95vh;
   border: 4px solid white;
   border-radius: 16px;
   box-shadow: $shadow;
@@ -46,7 +51,7 @@ $overlay: rgba(35, 38, 47, 0.5);
 
   .img-block img {
     width: 800px;
-    height: 350px;
+    height: 360px;
     object-fit: cover;
     border-radius: 4px;
   }
@@ -98,13 +103,13 @@ div.list-wrapper {
 
 .list {
   display: flex;
-  height: 300px;
-  width: 280px;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   overflow-y: auto;
   overflow-x: hidden;
+  height: 300px;
+  width: 280px;
 
   .list-el,
   .list-el-admin {
@@ -158,23 +163,23 @@ div.list-panel {
 }
 
 .tutorial-overlay {
-  z-index: 3;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   background-color: $overlay;
   font-size: 20px;
+  z-index: 3;
 
   .show-tutorial {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 700px;
-    height: 500px;
     text-align: center;
     color: white;
+    width: 700px;
+    height: 500px;
 
     .tutorial-header {
       font-size: 36px;
@@ -225,11 +230,9 @@ div.list-panel {
 
 .map {
   display: flex;
+  align-self: center;
   flex-wrap: wrap;
   background-color: var(--field-color);
-  position: absolute;
-  left: 34%;
-  top: 17%;
   border: 4px solid $border;
   box-shadow: $shadow;
   border-radius: 16px;
@@ -239,8 +242,9 @@ div.list-panel {
   z-index: 2;
 
   div {
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
+    margin: 0;
   }
 }
 
@@ -260,12 +264,6 @@ div.list-panel {
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-}
-
-.grid div {
-  width: 20px;
-  height: 20px;
-  margin: 1px;
 }
 
 .super-apple {
@@ -321,7 +319,7 @@ div.list-panel {
   align-items: flex-start;
   justify-content: space-between;
   height: 700px;
-  width: 300px;
+  width: 245px;
   color: white;
   margin-left: 32px;
   padding-left: 28px;
@@ -381,7 +379,7 @@ div.list-panel {
 .new-speed-input {
   appearance: none;
   width: 100%;
-  height: 15px;
+  height: 16px;
   background-color: white;
   outline: none;
 
@@ -391,15 +389,15 @@ div.list-panel {
 
   &::-webkit-slider-thumb {
     appearance: none;
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
     background-color: var(--container-color);
     cursor: pointer;
   }
 
   &::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
+    width: 24px;
+    height: 24px;
     background-color: $border;
   }
 }
@@ -410,7 +408,7 @@ div.list-panel {
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 330px;
+  width: 275px;
   height: 60px;
   padding: 2px;
   color: white;
@@ -440,11 +438,14 @@ div.list-panel {
   font-weight: bold;
   color: white;
   position: absolute;
-  opacity: 0.3;
+  opacity: 0.4;
+  border-radius: 5%;
   background-color: var(--container-color);
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  left: 52.5%;
+  top: 52.5%;
+  transform: translate(-50%, -50%) rotateZ(0deg);
+  transition: transform 1s ease-in-out;
+  transform-origin: center;
   z-index: 3;
 }
 
@@ -520,8 +521,8 @@ div.list-panel {
         .checkbox-column {
           width: 300px;
           input {
-            width: 15px;
-            height: 15px;
+            width: 16px;
+            height: 16px;
           }
         }
       }
@@ -535,6 +536,10 @@ div.list-panel {
     margin-top: 24px;
     width: 100%;
     border: 2px solid transparent;
+
+    .h3-left {
+      margin-left: 16px;
+    }
 
     label {
       width: 100%;
@@ -567,6 +572,9 @@ div.list-panel {
   }
 
   .add-preset {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 4px dashed white;
     padding: 16px;
     margin-top: 48px;
@@ -728,7 +736,7 @@ div.delete-button {
 
 @keyframes moveDown {
   from {
-    transform: translateY(calc(-100vh));
+    transform: translateY(calc(-10vh));
   }
 
   to {
@@ -758,6 +766,18 @@ div.delete-button {
   }
 }
 
+.disabled-settings {
+  cursor: not-allowed;
+  filter: grayscale(30%) contrast(90%);
+
+  input,
+  div,
+  &:hover {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+}
+
 .row {
   display: flex;
   justify-content: space-between;
@@ -771,4 +791,273 @@ div.delete-button {
   height: 0;
   display: none;
   visibility: hidden;
+}
+
+@media only screen and (max-width: 1850px) {
+  .admin-panel {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    .panel {
+      margin: 64px 0 0 0;
+    }
+
+    .add-preset {
+      width: 130px;
+      height: 35px;
+    }
+
+    .inputs-column,
+    .checkbox-column {
+      margin: 0 24px 24px;
+    }
+  }
+}
+
+@media only screen and (max-width: 1280px) {
+  .overlay-start {
+    .img-block img {
+      width: 550px;
+      height: 300px;
+    }
+
+    div {
+      margin: 16px;
+    }
+  }
+
+  div.list-wrapper {
+    margin: 0 32px 0 0;
+  }
+
+  .column {
+    margin: 0;
+  }
+
+  .container {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .score-div {
+    margin-bottom: 24px;
+  }
+
+  .container-settings {
+    margin-top: 64px;
+    margin-bottom: 24px;
+  }
+}
+
+@media only screen and (max-width: 970px) {
+  .overlay-start {
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: scroll;
+    overflow-x: hidden;
+
+    .column:nth-child(2) {
+      margin-top: 64px;
+    }
+  }
+
+  .overlay-start::-webkit-scrollbar {
+    width: 4px;
+    height: 6px;
+    box-shadow: $shadow;
+    border-radius: 12px;
+  }
+
+  .overlay-start::-webkit-scrollbar-thumb {
+    background: white;
+  }
+
+  div.column {
+    margin-top: 32px;
+    width: 100%;
+  }
+
+  .tutorial-overlay {
+    font-size: 16px;
+
+    .show-tutorial {
+      width: 400px;
+
+      .tutorial-body {
+        .column {
+          img {
+            width: 100px;
+            height: 100px;
+          }
+
+          p {
+            width: 50px;
+          }
+        }
+      }
+
+      .start-button {
+        width: 100px;
+        height: 40px;
+      }
+
+      p {
+        width: 500px;
+      }
+    }
+  }
+
+  .admin-panel {
+    .panel {
+      .preset-settings {
+        .preset-settings-wrapper {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  div.list-panel {
+    height: 300px;
+  }
+}
+
+@media only screen and (max-width: 590px) {
+  .overlay-start {
+    .header p {
+      font-size: 28px;
+    }
+
+    .img-block img {
+      width: 280px;
+      height: 180px;
+    }
+
+    .show-tutorial-button {
+      width: 100px;
+      height: 40px;
+      font-size: 20px;
+      margin-top: 32px;
+    }
+  }
+
+  .header-presets {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  .list {
+    width: 220px;
+
+    .list-el {
+      margin: 24px;
+      font-size: 20px;
+    }
+
+    .list-wrapper {
+      width: 220px;
+    }
+  }
+
+  .tutorial-overlay {
+    font-size: 14px;
+
+    .show-tutorial {
+      width: 300px;
+
+      .tutorial-body {
+        .column {
+          img {
+            width: 60px;
+            height: 60px;
+          }
+        }
+      }
+
+      p {
+        width: 300px;
+      }
+    }
+  }
+
+  .admin-panel {
+    .panel {
+      .preset-settings {
+        width: 75%;
+        margin-right: 8px;
+      }
+
+      width: 300px;
+      margin: 32px 0;
+
+      .column-presets {
+        width: 300px;
+        margin: 32px 0;
+      }
+    }
+
+    .line {
+      select,
+      input {
+        width: 70px;
+      }
+
+      h3 {
+        text-align: left;
+        width: 100px;
+        font-size: 14px;
+      }
+    }
+
+    .add-preset {
+      width: 110px;
+      height: 20px;
+    }
+  }
+
+  .new-preset-h1 {
+    font-size: 24px;
+  }
+
+  .list-el-admin {
+    margin: 16px 0;
+  }
+
+  div.list-panel {
+    width: 290px;
+  }
+
+  .overlay-modal .modal {
+    width: 300px;
+    height: 460px;
+    margin-top: 54px;
+
+    h1 {
+      font-size: 28px;
+    }
+
+    hr {
+      width: 280px;
+    }
+
+    .row {
+      width: 280px;
+      padding: 4px 0 0 0;
+
+      input {
+        width: 80%;
+      }
+    }
+
+    .container-buttons {
+      flex-direction: column;
+
+      div {
+        margin: 8px;
+        width: 130px;
+      }
+    }
+  }
 }

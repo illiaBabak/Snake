@@ -1,7 +1,7 @@
-import { getTargetElement } from "src/utils/getTargetElement";
+import { getCoreElements } from "./getCoreElements";
 
 export function showAlert(message: string): void {
-    const errorMessage = getTargetElement('error-message', document.getElementsByTagName('div'));
+    const { errorMessage } = getCoreElements();
     if (!errorMessage) return;
 
     errorMessage.innerHTML = '';

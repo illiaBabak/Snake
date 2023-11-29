@@ -15,15 +15,12 @@ function generateExcludedValues(array: number[][]) {
   const excludedNumbers: number[] = [];
   array.forEach((el) => {
     excludedNumbers.push(el[0], el[1], el[el.length - 1], el[el.length - 2]);
-  })
+  });
 
   return excludedNumbers;
 }
 
-export function makeRandomTeleport(
-  squares: HTMLDivElement[],
-  rowLength: number
-): void {
+export function makeRandomTeleport(squares: HTMLDivElement[], rowLength: number): void {
   const mapIndexes = squares.map((_, index) => index);
   const subArrays = generateSubArrays(mapIndexes, rowLength);
   const excludedNumbers = generateExcludedValues(subArrays);
@@ -34,11 +31,12 @@ export function makeRandomTeleport(
     firstTeleportIndex = getRandomInteger(rowLength * 2, squares.length - rowLength * 2 - 1, excludedNumbers);
     secondTeleportIndex = getRandomInteger(rowLength * 2, squares.length - rowLength * 2 - 1, excludedNumbers);
 
-    const shouldBreak = [firstTeleportIndex, secondTeleportIndex].every((el) => !EXCLUDED_CLASS_NAMES.some((className) => squares[el].classList.contains(className)));
+    const shouldBreak = [firstTeleportIndex, secondTeleportIndex].every(
+      (el) => !EXCLUDED_CLASS_NAMES.some((className) => squares[el].classList.contains(className))
+    );
     if (shouldBreak) break;
   }
 
   squares[firstTeleportIndex].classList.add('teleport-el', 'first-teleport');
   squares[secondTeleportIndex].classList.add('teleport-el', 'second-teleport');
 }
-
