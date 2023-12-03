@@ -1,5 +1,5 @@
 import { createMap } from "./createMap";
-import { defaultSettings } from "src/variables/variables";
+import { defaultSettings } from "src/variables/gameSettings";
 import { getCoreElements } from "./getCoreElements";
 
 type SelectChangeEvent = Event & { target: HTMLSelectElement };

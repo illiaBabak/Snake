@@ -1,8 +1,8 @@
 import { Preset } from 'src/types/preset';
 import { getCoreElements } from './getCoreElements';
-import { gameSettings } from 'src/variables/variables';
+import { gameSettings } from 'src/variables/gameSettings';
 import { createMap } from './createMap';
-import { KeyOfPreset } from 'src/types/otherTypes';
+import { KeyOfPreset } from 'src/types/generalTypes';
 
 export function changePreset(preset: Preset): void {
   const root = document.documentElement;

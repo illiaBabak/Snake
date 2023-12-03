@@ -1,4 +1,4 @@
-import { defaultSettings, gameSettings } from 'src/variables/variables';
+import { defaultSettings, gameSettings } from 'src/variables/gameSettings';
 import { getCoreElements } from './getCoreElements';
 import { makeRandomApple } from './makeRandomApple';
 import { removeClasses } from './removeClasses';
@@ -10,7 +10,7 @@ import { showFeatureMsg } from './showFeatureMsg';
 import { generateTeleports } from './generateTeleports';
 import { rotateMap } from './rotateMap';
 import { generateObstacles } from './generateObstacles';
-import { changeColorSnake } from './changeColorSnake';
+import { changeCSSVariable } from './changeCSSVariable';
 
 export function eatApple(squares: HTMLDivElement[], tail: number): void {
   const { map, colorSnakeInput, scoreText, pauseDiv } = getCoreElements();
@@ -55,12 +55,10 @@ export function eatApple(squares: HTMLDivElement[], tail: number): void {
         }, 1800);
       }
 
-      showFeatureMsg(
-        gameSettings.shouldDirectionFlip,
-        gameSettings.shouldOpacity,
-        gameSettings.shouldChangeSpeed,
-        defaultSettings.score
-      );
+      if (gameSettings.shouldDirectionFlip) showFeatureMsg('Change of direction!\n');
+      if (gameSettings.shouldOpacity) showFeatureMsg('Change of opacity!\n');
+      if (gameSettings.shouldChangeSpeed && defaultSettings.score % 3 === 0) showFeatureMsg('Speed 2x!\n');
+      if (gameSettings.shouldMapFlip) showFeatureMsg('Map flip!');
 
       if (gameSettings.shouldMapFlip) rotateMap(map, pauseDiv);
       if (gameSettings.shouldObstacles) generateObstacles(squares, defaultSettings.score, rowLength);
@@ -71,7 +69,7 @@ export function eatApple(squares: HTMLDivElement[], tail: number): void {
     squares[defaultSettings.currentSnake[0]].classList.remove('super-apple');
     squares[tail].classList.add('snake');
 
-    changeColorSnake(gameSettings.colorSnake);
+    changeCSSVariable(gameSettings.colorSnake, '--color-snake');
     clearInterval(defaultSettings.interval);
 
     for (let i = 0; i < loopN; i++) {

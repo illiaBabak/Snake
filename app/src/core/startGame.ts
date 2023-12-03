@@ -1,5 +1,5 @@
 import { getRandomInteger } from "src/utils/getRandomInteger";
-import { defaultSettings, gameSettings } from "src/variables/variables";
+import { defaultSettings, gameSettings } from "src/variables/gameSettings";
 import { animateBackground } from "./animateBackground";
 import { changeSpeed } from "./changeSpeed";
 import { CLASSES_TO_REMOVE_AFTER_START, CLASSES_TO_REMOVE_IN_APPLE, KEY_PRESS_COOLDOWN, SPEED_MAP } from "src/variables/constants";
@@ -10,8 +10,8 @@ import { moveOutcome } from "./moveOutcome";
 import { getCoreElements } from "./getCoreElements";
 
 export function startGame(): void {
-    const { scoreText, settings, startButton, speedInput, squares } = getCoreElements();
-    if (!squares || !settings || !speedInput || !scoreText || !startButton) return;
+    const { scoreText, settings, startButton, speedInput, squares, pauseButton } = getCoreElements();
+    if (!squares || !settings || !speedInput || !scoreText || !startButton || !pauseButton) return;
 
     if (!settings.classList.contains('hidden')) defaultSettings.intervalTime = changeSpeed(speedInput.value, SPEED_MAP);
 
@@ -41,6 +41,7 @@ export function startGame(): void {
     settings.classList.add('disabled-settings');
     startButton.classList.add('disabled-settings');
     startButton.removeEventListener('click', startGame);
+    pauseButton.classList.remove('disabled-settings');
 
     makeRandomApple(squares);
 

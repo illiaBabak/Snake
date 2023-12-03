@@ -1,6 +1,6 @@
 export function hexToRGB(hex: string, alpha: number): string {
-    hex = hex.replace(/^#/, '');
-    const bigint = parseInt(hex, 16);
+    const parsedHex = hex.replace(/^#/, '');
+    const bigint = parseInt(parsedHex, 16);
 
     const r = (bigint >> 16) & 255,
         g = (bigint >> 8) & 255,

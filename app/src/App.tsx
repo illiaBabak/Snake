@@ -1,18 +1,16 @@
 import './App.scss';
 import { useEffect } from 'react';
-import { changeColorSnake } from './core/changeColorSnake';
-import { changeColorMap } from './core/changeColorMap';
 import { changeSizeMap } from './core/changeSizeMap';
 import { changeSpeed } from './core/changeSpeed';
 import { getCoreElements } from './core/getCoreElements';
 import { pauseOrRestartGame } from './core/pauseOrRestartGame';
 import { CheckBoxChangeEvent, SelectChangeEvent } from './types/eventTypes';
 import { SPEED_MAP } from './variables/constants';
-import { defaultSettings, gameSettings } from './variables/variables';
+import { defaultSettings, gameSettings } from './variables/gameSettings';
 import { showTutorial } from './core/showTutorial';
 import { closeTutorial } from './core/closeTutorial';
 import { removePresetsListeners } from './core/removePresetsListeners';
-import { keysToOpenPanel } from './variables/constants';
+import { KEYS_TO_OPEN_PANEL } from './variables/constants';
 import { openOrCloseAdminPanel } from './core/openOrCloseAdminPanel';
 import { showImgInput } from './core/showImgInput';
 import { handleInput } from './core/handleInput';
@@ -21,6 +19,7 @@ import { endSwap, startSwap } from './core/swapDirection';
 import { startGame } from './core/startGame';
 import { moveOutcome } from './core/moveOutcome';
 import { addEventListeners } from './core/addEventListeners';
+import { changeCSSVariable } from './core/changeCSSVariable';
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -141,12 +140,12 @@ function App(): JSX.Element {
 
   function handleColorSnakeInput(input: HTMLInputElement) {
     gameSettings.colorSnake = input.value;
-    changeColorSnake(gameSettings.colorSnake);
+    changeCSSVariable(gameSettings.colorSnake, '--color-snake');
   }
 
   function handleColorMapInput(input: HTMLInputElement) {
     gameSettings.fieldColor = input.value;
-    changeColorMap(gameSettings.fieldColor);
+    changeCSSVariable(gameSettings.fieldColor, '--field-color');
   }
 
   function handleSizeMapChange(e: SelectChangeEvent) {
@@ -164,7 +163,7 @@ function App(): JSX.Element {
 
   function handleKeyDown(e: KeyboardEvent) {
     defaultSettings.keysPressed[e.key] = true;
-    const isOpenPanel = keysToOpenPanel.every((key) => defaultSettings.keysPressed[key]);
+    const isOpenPanel = KEYS_TO_OPEN_PANEL.every((key) => defaultSettings.keysPressed[key]);
     const { map } = getCoreElements();
 
     if (isOpenPanel && map && map.classList.contains('hidden')) openOrCloseAdminPanel();
@@ -177,9 +176,14 @@ function App(): JSX.Element {
   function handlePause(e: MouseEvent | KeyboardEvent) {
     if (defaultSettings.isGameOver || !defaultSettings.interval) return;
 
-    const { pauseButton } = getCoreElements();
+    const { pauseButton, map, pauseDiv } = getCoreElements();
 
     e.stopPropagation();
+
+    if (defaultSettings.isPaused && gameSettings.shouldMapFlip && map && pauseDiv) {
+      map.style.transform = `rotateZ(${0}deg)`;
+      pauseDiv.style.transform = `translate(-50%, -50%) rotateZ(${0}deg)`;
+    }
 
     if (!defaultSettings.isPaused) clearInterval(defaultSettings.interval);
     else defaultSettings.interval = setInterval(moveOutcome, defaultSettings.intervalTime);
@@ -505,9 +509,9 @@ function App(): JSX.Element {
             <div className='size-map settings-field'>
               <p>Map size</p>
               <select className='select-size map-size'>
-                <option value={'40'}>40x40</option>
-                <option value={'30'}>30x30</option>
-                <option value={'20'}>20x20</option>
+                <option value='40'>40x40</option>
+                <option value='30'>30x30</option>
+                <option value='20'>20x20</option>
               </select>
             </div>
 
@@ -525,7 +529,7 @@ function App(): JSX.Element {
 
         <div className='start-try-again'>Start game</div>
 
-        <div className='pause'>Pause</div>
+        <div className='pause disabled-settings'>Pause</div>
       </div>
 
       <div className='map hidden'></div>

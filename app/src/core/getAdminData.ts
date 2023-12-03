@@ -1,4 +1,4 @@
-import { LoginData } from "src/types/otherTypes";
+import { LoginData } from "src/types/generalTypes";
 
 function isLoginData(data: unknown): data is LoginData {
     return (

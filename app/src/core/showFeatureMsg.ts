@@ -1,17 +1,20 @@
 import { getCoreElements } from "./getCoreElements";
 
-export function showFeatureMsg(isDirectionFlip: boolean, shouldOpacityChange: boolean, shouldSpeedChange: boolean, score: number): void {
+let lastTimeoutId: NodeJS.Timeout | null = null;
+
+export function showFeatureMsg(text: string): void {
     const { featureMessage } = getCoreElements();
-    if (!featureMessage || (!isDirectionFlip && !shouldOpacityChange && !shouldSpeedChange)) return;
+    if (!featureMessage) return;
 
-    if (isDirectionFlip) featureMessage.innerText += 'Change of direction!\n';
-    if (shouldOpacityChange) featureMessage.innerText += 'Change of opacity!\n';
-    if (shouldSpeedChange && score % 3 === 0) featureMessage.innerText += 'Speed 2x!\n';
+    featureMessage.innerText += text;
 
-    if (featureMessage.innerText !== '') featureMessage.classList.remove('hidden');
+    featureMessage.classList.remove('hidden');
 
-    setTimeout(() => {
+    if (lastTimeoutId) clearTimeout(lastTimeoutId);
+
+    lastTimeoutId = setTimeout(() => {
         featureMessage.classList.add('hidden');
         featureMessage.innerText = '';
     }, 1800);
 }
+

@@ -20,6 +20,4 @@ export type Preset = {
     mapSize: string;
 };
 
-export type KeysPressed = {
-    [key: string]: boolean;
-};
+export type KeysPressed = Record<string, boolean>

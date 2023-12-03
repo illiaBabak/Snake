@@ -1,4 +1,4 @@
-import { DefaultSettings } from "src/types/otherTypes"
+import { DefaultSettings } from "src/types/generalTypes"
 
 export const gameSettings = {
     key: '',

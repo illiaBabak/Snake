@@ -30,6 +30,7 @@ export function editPreset(key: string): void {
     newColorShadow,
     newStartImg,
   } = getCoreElements();
+
   if (
     !lineAnimation ||
     !errorMessage ||

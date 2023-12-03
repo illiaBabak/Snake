@@ -1,4 +1,4 @@
-import { defaultSettings } from "src/variables/variables";
+import { defaultSettings } from "src/variables/gameSettings";
 import { changeDirection } from "./changeDirection";
 
 let startCoordinates = { x: 0, y: 0 };
@@ -21,18 +21,17 @@ export function endSwap(e: TouchEvent): void {
 }
 
 function changeDirectionSwap(): void {
-    const minusX = startCoordinates.x - endCoordinates.x;
-    const minusY = startCoordinates.y - endCoordinates.y;
+    const shiftX = startCoordinates.x - endCoordinates.x;
+    const shiftY = startCoordinates.y - endCoordinates.y;
 
     const { rowLength, rotateDirection } = defaultSettings;
+    let keyCode = '';
 
-    if (minusX > 0 && Math.abs(minusX) > Math.abs(minusY))
-        defaultSettings.direction = changeDirection('KeyA', rowLength, defaultSettings.direction, rotateDirection);
-    else if (minusX < 0 && Math.abs(minusX) > Math.abs(minusY))
-        defaultSettings.direction = changeDirection('KeyD', rowLength, defaultSettings.direction, rotateDirection);
+    if (Math.abs(shiftX) > Math.abs(shiftY))
+        keyCode = shiftX > 0 ? 'KeyA' : 'KeyD';
 
-    if (minusY > 0 && Math.abs(minusX) < Math.abs(minusY))
-        defaultSettings.direction = changeDirection('KeyW', rowLength, defaultSettings.direction, rotateDirection);
-    else if (minusY < 0 && Math.abs(minusX) < Math.abs(minusY))
-        defaultSettings.direction = changeDirection('KeyS', rowLength, defaultSettings.direction, rotateDirection);
+    else if (Math.abs(shiftY) > 0)
+        keyCode = shiftY > 0 ? 'KeyW' : 'KeyS';
+
+    defaultSettings.direction = changeDirection(keyCode, rowLength, defaultSettings.direction, rotateDirection);
 }

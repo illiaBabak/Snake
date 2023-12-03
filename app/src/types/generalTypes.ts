@@ -8,7 +8,7 @@ export type LoginData = {
 
 export type KeyOfPreset = (typeof PRESET_KEYS)[number];
 
-export interface DefaultSettings {
+export type DefaultSettings = {
     direction: number,
     rowLength: number,
     rotateDirection: boolean,

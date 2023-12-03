@@ -1,4 +1,4 @@
-import { gameSettings } from 'src/variables/variables';
+import { gameSettings } from 'src/variables/gameSettings';
 import { closeTutorial } from './closeTutorial';
 import { getCoreElements } from './getCoreElements';
 import { showTutorial } from './showTutorial';

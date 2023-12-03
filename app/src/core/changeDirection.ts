@@ -4,29 +4,20 @@ export function changeDirection(
   lastDirection: number,
   isDirectionFlip: boolean
 ): number {
-  if (
-    (!isDirectionFlip && lastDirection === +rowLength && key === 'KeyW') ||
-    (isDirectionFlip && lastDirection === +rowLength && key === 'KeyS')
-  )
+  const isTopDirection = lastDirection === -rowLength;
+  const isDownDirection = lastDirection === +rowLength;
+  const isRightDirection = lastDirection === 1;
+  const isLeftDirection = lastDirection === -1;
+
+  if (isDownDirection && ((!isDirectionFlip && key === 'KeyW') || (isDirectionFlip && key === 'KeyS')))
     return +rowLength;
 
-  if (
-    (!isDirectionFlip && lastDirection === -rowLength && key === 'KeyS') ||
-    (isDirectionFlip && lastDirection === -rowLength && key === 'KeyW')
-  )
+  if (isTopDirection && ((!isDirectionFlip && key === 'KeyS') || (isDirectionFlip && key === 'KeyW')))
     return -rowLength;
 
-  if (
-    (!isDirectionFlip && lastDirection === -1 && key === 'KeyD') ||
-    (isDirectionFlip && lastDirection === -1 && key === 'KeyA')
-  )
-    return -1;
+  if (isLeftDirection && ((!isDirectionFlip && key === 'KeyD') || (isDirectionFlip && key === 'KeyA'))) return -1;
 
-  if (
-    (!isDirectionFlip && lastDirection === 1 && key === 'KeyA') ||
-    (isDirectionFlip && lastDirection === 1 && key === 'KeyD')
-  )
-    return 1;
+  if (isRightDirection && ((!isDirectionFlip && key === 'KeyA') || (isDirectionFlip && key === 'KeyD'))) return 1;
 
   let direction = 1;
 

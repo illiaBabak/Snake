@@ -3,7 +3,7 @@ import { getCoreElements } from './getCoreElements';
 import { PRESET_KEYS } from 'src/variables/constants';
 import { showAlert } from './showAlert';
 import { removeAlert } from './removeAlert';
-import { KeyOfPreset } from 'src/types/otherTypes';
+import { KeyOfPreset } from 'src/types/generalTypes';
 import { getPresetsFromLocalStorage } from './getPresetsFromLocalStorage';
 
 const REQUIRED_FIELDS: KeyOfPreset[] = ['name', 'startImg', 'animationImg'];

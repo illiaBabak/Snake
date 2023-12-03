@@ -1,6 +1,6 @@
 import { getTargetElements } from 'src/utils/getTargetElements';
 import { checkIsGameOver } from './checkIsGameOver';
-import { defaultSettings } from 'src/variables/variables';
+import { defaultSettings } from 'src/variables/gameSettings';
 import { startGame } from './startGame';
 import { moveSnake } from './moveSnake';
 import { getCoreElements } from './getCoreElements';
@@ -11,12 +11,12 @@ export function moveOutcome(): void {
 
   if (!settings || !startButton) return;
 
-  if (
-    checkIsGameOver(squares, defaultSettings.direction, defaultSettings.rowLength, defaultSettings.currentSnake) &&
-    defaultSettings.interval
-  ) {
+  const { direction, rowLength, currentSnake, interval } = defaultSettings;
+  const isCheckGameOver = checkIsGameOver(squares, direction, rowLength, currentSnake);
+
+  if (isCheckGameOver && interval) {
     defaultSettings.isGameOver = true;
-    clearInterval(defaultSettings.interval);
+    clearInterval(interval);
     settings.classList.remove('disabled-settings');
     startButton.addEventListener('click', startGame);
   } else moveSnake(squares);

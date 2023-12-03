@@ -1,5 +1,14 @@
 import { getCoreElements } from './getCoreElements';
 
+function isEdgeDetected(currentSnake: number[], rowLength: number, direction: number): boolean {
+  return (
+    (currentSnake[0] + rowLength >= rowLength * rowLength && direction === rowLength) ||
+    (currentSnake[0] % rowLength === rowLength - 1 && direction === 1) ||
+    (currentSnake[0] % rowLength === 0 && direction === -1) ||
+    (currentSnake[0] - rowLength <= 0 && direction === -rowLength)
+  );
+}
+
 export function checkIsGameOver(
   squares: HTMLDivElement[],
   direction: number,
@@ -15,17 +24,14 @@ export function checkIsGameOver(
     return false;
 
   if (
-    (currentSnake[0] + rowLength >= rowLength * rowLength && direction === rowLength) ||
-    (currentSnake[0] % rowLength === rowLength - 1 && direction === 1) ||
-    (currentSnake[0] % rowLength === 0 && direction === -1) ||
-    (currentSnake[0] - rowLength <= 0 && direction === -rowLength) ||
-    squares[currentSnake[0] + direction].classList.contains('snake') ||
-    squares[currentSnake[0] + direction].classList.contains('obstacle-el')
+    isEdgeDetected(currentSnake, rowLength, direction) ||
+    squares[currentSnake[0] + direction].classList.contains('snake')
   ) {
-    const { startButton } = getCoreElements();
-    if (startButton) {
+    const { startButton, pauseButton } = getCoreElements();
+    if (startButton && pauseButton) {
       startButton.innerText = 'Try again';
       startButton.classList.remove('disabled-settings');
+      pauseButton.classList.add('disabled-settings');
     }
     return true;
   }
