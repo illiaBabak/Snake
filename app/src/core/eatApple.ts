@@ -15,23 +15,21 @@ import { changeCSSVariable } from './changeCSSVariable';
 export function eatApple(squares: HTMLDivElement[], tail: number): void {
   const { map, colorSnakeInput, scoreText, pauseDiv } = getCoreElements();
   const { rowLength } = defaultSettings;
+  const snakeStartClassList = squares[defaultSettings.currentSnake[0]].classList;
 
   if (!defaultSettings.interval || !map || !colorSnakeInput || !pauseDiv) return;
 
-  if (
-    squares[defaultSettings.currentSnake[0]].classList.contains('super-apple') ||
-    squares[defaultSettings.currentSnake[0]].classList.contains('apple')
-  ) {
-    let loopN = 1;
-    if (squares[defaultSettings.currentSnake[0]].classList.contains('apple')) {
-      squares[defaultSettings.currentSnake[0]].classList.remove('apple');
+  if (snakeStartClassList.contains('super-apple') || snakeStartClassList.contains('apple')) {
+    let snakeIncrement = 1;
+    if (snakeStartClassList.contains('apple')) {
+      snakeStartClassList.remove('apple');
       makeRandomApple(squares);
 
       removeClasses(squares, CLASSES_TO_REMOVE_IN_APPLE);
 
       if (gameSettings.shouldDirectionFlip) defaultSettings.rotateDirection = !defaultSettings.rotateDirection;
 
-      if (gameSettings.shouldChangeSpeed) {
+      if (gameSettings.shouldChangeColor) {
         gameSettings.colorSnake = changeRandomColor();
         colorSnakeInput.value = gameSettings.colorSnake;
       }
@@ -64,22 +62,24 @@ export function eatApple(squares: HTMLDivElement[], tail: number): void {
       if (gameSettings.shouldObstacles) generateObstacles(squares, defaultSettings.score, rowLength);
       if (defaultSettings.score >= 5 && gameSettings.shouldTeleport)
         generateTeleports(squares, defaultSettings.score, rowLength);
-    } else loopN = 5;
+    } else {
+      snakeIncrement = 5;
+      snakeStartClassList.remove('super-apple');
+    }
 
-    squares[defaultSettings.currentSnake[0]].classList.remove('super-apple');
     squares[tail].classList.add('snake');
 
     changeCSSVariable(gameSettings.colorSnake, '--color-snake');
     clearInterval(defaultSettings.interval);
 
-    for (let i = 0; i < loopN; i++) {
+    for (let i = 0; i < snakeIncrement; i++) {
       defaultSettings.currentSnake.push(tail);
       defaultSettings.intervalTime = defaultSettings.intervalTime * ACCELERATION_FACTOR;
     }
 
     defaultSettings.interval = setInterval(moveOutcome, defaultSettings.intervalTime);
 
-    defaultSettings.score += loopN;
+    defaultSettings.score += snakeIncrement;
 
     if (scoreText) scoreText.innerText = defaultSettings.score.toString();
   }

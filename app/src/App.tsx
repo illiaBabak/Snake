@@ -7,8 +7,6 @@ import { pauseOrRestartGame } from './core/pauseOrRestartGame';
 import { CheckBoxChangeEvent, SelectChangeEvent } from './types/eventTypes';
 import { SPEED_MAP } from './variables/constants';
 import { defaultSettings, gameSettings } from './variables/gameSettings';
-import { showTutorial } from './core/showTutorial';
-import { closeTutorial } from './core/closeTutorial';
 import { removePresetsListeners } from './core/removePresetsListeners';
 import { KEYS_TO_OPEN_PANEL } from './variables/constants';
 import { openOrCloseAdminPanel } from './core/openOrCloseAdminPanel';
@@ -75,8 +73,8 @@ function App(): JSX.Element {
     addEventListeners(defaultSettings.currentSnake);
 
     startButton.addEventListener('click', startGame);
-    closeModalButton.addEventListener('click', handleOpenModal);
-    addPresetButton.addEventListener('click', handleOpenModal);
+    closeModalButton.addEventListener('click', openOrCloseModal);
+    addPresetButton.addEventListener('click', openOrCloseModal);
 
     speedInput.addEventListener('input', () => handleSpeedInput(speedInput, speedText));
     newSpeedInput.addEventListener('input', () => handleSpeedInput(newSpeedInput, newSpeedText));
@@ -100,13 +98,6 @@ function App(): JSX.Element {
     return () => {
       startButton.removeEventListener('click', startGame);
 
-      speedInput.removeEventListener('input', () => handleSpeedInput(speedInput, speedText));
-      colorSnakeInput.removeEventListener('input', () => handleColorSnakeInput(colorSnakeInput));
-      colorMapInput.removeEventListener('input', () => handleColorMapInput(colorMapInput));
-      sizeMap.removeEventListener('change', (e) => handleSizeMapChange(e as SelectChangeEvent));
-      obstaclesInput.removeEventListener('change', (e) => handleObstaclesInputChange(e as CheckBoxChangeEvent));
-      teleportInput.removeEventListener('change', (e) => handleTeleportInputChange(e as CheckBoxChangeEvent));
-      setAnimation.removeEventListener('change', (e) => showImgInput(e as CheckBoxChangeEvent));
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
 
@@ -115,23 +106,11 @@ function App(): JSX.Element {
 
       removePresetsListeners();
 
-      showTutorialButton.removeEventListener('click', () => showTutorial(overlayStart, tutorialOverlay));
-      closeTutorialButton.removeEventListener('click', () =>
-        closeTutorial(defaultSettings.currentSnake, tutorialOverlay, map)
-      );
-
       document.removeEventListener('keydown', restartGameUsingKeyboard);
       document.removeEventListener('keyup', pauseGameUsingKeyboard);
       pauseButton.removeEventListener('click', handlePause);
     };
   }, []);
-
-  function handleOpenModal(): void {
-    const { closeModalButton, addPresetButton } = getCoreElements();
-    if (!closeModalButton || !addPresetButton) return;
-
-    openOrCloseModal();
-  }
 
   function handleSpeedInput(input: HTMLInputElement, speedText: HTMLParagraphElement) {
     speedText.innerText = input.value;
