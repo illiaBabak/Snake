@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Snake/static/css/main.36f77c84.css",
+    "main.js": "/Snake/static/js/main.b803fd32.js",
+    "static/media/teleport.png": "/Snake/static/media/teleport.a01259c0baef220a4c56.png",
+    "static/media/computer_key_W.png": "/Snake/static/media/computer_key_W.2710f8373444ca714a13.png",
+    "static/media/computer_key_S.png": "/Snake/static/media/computer_key_S.4b1a45e4c96fe05b2447.png",
+    "index.html": "/Snake/index.html",
+    "main.36f77c84.css.map": "/Snake/static/css/main.36f77c84.css.map",
+    "main.b803fd32.js.map": "/Snake/static/js/main.b803fd32.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.36f77c84.css",
+    "static/js/main.b803fd32.js"
+  ]
+}
