@@ -33,3 +33,4 @@ jobs:
         with:
           branch: gh-pages
           folder: build
+          deploy_token: ${{secrets.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}}
