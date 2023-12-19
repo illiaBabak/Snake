@@ -70,6 +70,8 @@ function App(): JSX.Element {
     )
       return;
 
+    localStorage.setItem('admin', JSON.stringify([{ login: 'admin', password: 'admin' }]));
+
     addEventListeners(defaultSettings.currentSnake);
 
     startButton.addEventListener('click', startGame);
@@ -445,19 +447,19 @@ function App(): JSX.Element {
           </p>
           <div className='tutorial-body'>
             <div className='column'>
-              <img src='content/computer_key_W.png'></img>
+              <img></img>
               <p className='tutorial-p'>Top</p>
             </div>
             <div className='column'>
-              <img src='content/computer_key_A.png'></img>
+              <img></img>
               <p className='tutorial-p'>Left</p>
             </div>
             <div className='column'>
-              <img src='content/computer_key_S.png'></img>
+              <img></img>
               <p className='tutorial-p'>Bottom</p>
             </div>
             <div className='column'>
-              <img src='content/computer_key_D.png'></img>
+              <img></img>
               <p className='tutorial-p'>Right</p>
             </div>
           </div>
